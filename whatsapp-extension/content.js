@@ -1,15 +1,13 @@
 // ============================================================
 // SORTLY - WhatsApp College File Organizer
-// SAFE CONTENT SCRIPT
+// Content Script (content.js)
+// Persistent State, Full Pipeline Tracking, and Explicit Controls
+// (Start, Pause, Resume, Stop, Initial Import)
 // ============================================================
 
-console.log("🚀 Sortly automatic file organizer loaded.");
+console.log("🚀 Sortly content script loaded.");
 
-// ============================================================
-// CONFIGURATION
-// ============================================================
-
-const knownGroups = [
+const configuredGroups = [
     "9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM",
     "ESD&IoT LE",
     "Y25-Mathematics for Data Science",
@@ -30,1243 +28,770 @@ const supportedExtensions = [
     ".zip"
 ];
 
-// ============================================================
-// STATE
-// ============================================================
+// Local memory cache synced with chrome.storage.local
+let localStore = {
+    version: 2,
+    runState: "STOPPED",
+    groups: {},
+    activeJobs: {}
+};
 
-// LIVE = automatically process genuinely new documents
-// INITIAL_IMPORT = deliberately import existing documents
-let sortlyMode = "LIVE";
-
-// Documents that existed when the baseline was created.
-const baselineDocuments = new Set();
-
-// Documents that have already been sent to the download pipeline.
-const processedDocuments = new Set();
-
-// Documents that were already handled during the current
-// Initial Import operation.
-const importedDocuments = new Set();
-
-// Prevent repeated baseline construction.
-let baselineReady = false;
-let baselineBuildRunning = false;
-
-// Prevent two Initial Imports at the same time.
+let activeGroupName = "Unknown";
 let initialImportRunning = false;
-
-// Current group currently associated with this page.
-let currentGroupName = "Unknown";
-
-// Timestamp of last reliable group detection.
-let currentGroupDetectedAt = 0;
+let importProgressText = "";
+let bridgeOnline = true;
 
 // ============================================================
-// SUPPORTED FILE CHECK
+// SYNC PERSISTENT STATE WITH BACKGROUND
 // ============================================================
 
-function isSupportedFile(fileName) {
-
-    if (!fileName) {
-        return false;
+async function refreshStore() {
+    try {
+        const response = await chrome.runtime.sendMessage({ type: "GET_STATE" });
+        if (response && response.ok && response.store) {
+            localStore = response.store;
+        }
+    } catch (err) {
+        // Background might be spinning up
     }
+}
 
-    const lower = fileName.toLowerCase();
+async function pollBridgeStatus() {
+    try {
+        const res = await chrome.runtime.sendMessage({ type: "CHECK_BRIDGE_STATUS" });
+        bridgeOnline = Boolean(res && res.online);
+    } catch (e) {
+        bridgeOnline = false;
+    }
+    updateUIBadge();
+}
 
-    return supportedExtensions.some(ext =>
-        lower.endsWith(ext)
-    );
+function getLocalGroupState(groupName) {
+    if (!localStore.groups[groupName]) {
+        localStore.groups[groupName] = {
+            importCompleted: false,
+            baselineInitialized: false,
+            baselineFileKeys: [],
+            processedFileKeys: [],
+            organizedFiles: [],
+            failedJobs: {}
+        };
+    }
+    return localStore.groups[groupName];
 }
 
 // ============================================================
-// GET FILE NAME FROM DOCUMENT BUTTON
-// ============================================================
-
-function getFileNameFromButton(button) {
-
-    if (!button) {
-        return null;
-    }
-
-    // WhatsApp currently uses title:
-    // Download "filename.ext"
-
-    const title =
-        button.getAttribute("title") || "";
-
-    const titleMatch =
-        title.match(/^Download\s+"(.+)"$/);
-
-    if (titleMatch && titleMatch[1]) {
-        return titleMatch[1];
-    }
-
-    // Backup: aria-label
-
-    const aria =
-        button.getAttribute("aria-label") || "";
-
-    const ariaMatch =
-        aria.match(/^Download\s+"(.+)"$/);
-
-    if (ariaMatch && ariaMatch[1]) {
-        return ariaMatch[1];
-    }
-
-    return null;
-}
-
-// ============================================================
-// NORMALIZE TEXT
+// TEXT & FILE HELPERS
 // ============================================================
 
 function normalizeText(value) {
-
     return (value || "")
+        .replace(/[\u200B-\u200D\uFEFF\u200E\u200F\u202A-\u202E]/g, "")
+        .replace(/\u00A0/g, " ")
         .replace(/\s+/g, " ")
         .trim();
 }
 
+function isSupportedFile(fileName) {
+    if (!fileName) return false;
+    const lower = normalizeText(fileName).toLowerCase();
+    return supportedExtensions.some(ext => lower.endsWith(ext));
+}
+
+function stripDuplicateSuffix(fileName) {
+    if (!fileName) return "";
+    const clean = normalizeText(fileName);
+    const lastDot = clean.lastIndexOf(".");
+    if (lastDot === -1) return clean;
+    const namePart = clean.substring(0, lastDot).replace(/\s*\(\d+\)$/, "").trim();
+    const extPart = clean.substring(lastDot);
+    return `${namePart}${extPart}`;
+}
+
 // ============================================================
-// FIND CURRENT WHATSAPP GROUP
-// ============================================================
-//
-// IMPORTANT:
-//
-// We deliberately do NOT simply scan the whole page and accept
-// any matching text. That caused files from one group to be
-// associated with another group.
-//
-// We first inspect likely WhatsApp conversation/header areas,
-// then use exact matching.
-//
+// ACTIVE GROUP DETECTION (STRICTLY FROM #main header)
 // ============================================================
 
-function findGroup() {
+function getActiveMainPanel() {
+    return document.getElementById("main") || document.querySelector("#main");
+}
 
-    // --------------------------------------------------------
-    // 1. Try known group names against likely header elements.
-    // --------------------------------------------------------
+function detectActiveGroup() {
+    const main = getActiveMainPanel();
+    if (!main) return "Unknown";
 
-    const likelySelectors = [
-        'header',
-        '[role="banner"]',
-        '[data-testid="conversation-header"]',
-        '[data-testid="conversation-info-header"]',
-        '[data-testid="chat-header"]'
-    ];
+    const header = main.querySelector("header") || main.querySelector('[role="banner"]');
+    if (!header) return "Unknown";
 
-    for (const selector of likelySelectors) {
-
-        const elements =
-            document.querySelectorAll(selector);
-
-        for (const element of elements) {
-
-            const text =
-                normalizeText(element.textContent);
-
-            if (!text) {
-                continue;
-            }
-
-            for (const group of knownGroups) {
-
-                if (
-                    text === group ||
-                    text.includes(group)
-                ) {
-
-                    currentGroupName = group;
-                    currentGroupDetectedAt = Date.now();
-
-                    console.log(
-                        "🎯 Sortly detected current group:",
-                        group
-                    );
-
-                    return group;
-                }
-            }
-        }
-    }
-
-    // --------------------------------------------------------
-    // 2. Look for exact title / aria-label matches.
-    // --------------------------------------------------------
-
-    const attributed =
-        document.querySelectorAll(
-            "[title], [aria-label]"
-        );
-
-    for (const element of attributed) {
-
-        const title =
-            normalizeText(
-                element.getAttribute("title")
-            );
-
-        const aria =
-            normalizeText(
-                element.getAttribute("aria-label")
-            );
-
-        for (const group of knownGroups) {
-
-            if (
-                title === group ||
-                aria === group
-            ) {
-
-                currentGroupName = group;
-                currentGroupDetectedAt = Date.now();
-
-                console.log(
-                    "🎯 Sortly detected current group:",
-                    group
-                );
-
+    // 1. Check title attributes in active header
+    const titleElements = header.querySelectorAll("[title]");
+    for (const el of titleElements) {
+        const title = normalizeText(el.getAttribute("title"));
+        for (const group of configuredGroups) {
+            if (title === normalizeText(group)) {
                 return group;
             }
         }
     }
 
-    // --------------------------------------------------------
-    // 3. Exact text fallback.
-    //
-    // We only accept an element whose complete visible text
-    // equals a configured group name.
-    // --------------------------------------------------------
-
-    for (const group of knownGroups) {
-
-        const elements =
-            document.querySelectorAll(
-                "span, div"
-            );
-
-        for (const element of elements) {
-
-            const text =
-                normalizeText(
-                    element.textContent
-                );
-
-            if (text === group) {
-
-                // Avoid accepting huge containers.
-                // A group name should normally be a reasonably
-                // small element.
-
-                if (text.length > 200) {
-                    continue;
-                }
-
-                currentGroupName = group;
-                currentGroupDetectedAt = Date.now();
-
-                console.log(
-                    "🎯 Sortly detected current group:",
-                    group
-                );
-
+    // 2. Check header innerText line by line
+    const lines = (header.innerText || "").split(/\r?\n/).map(normalizeText);
+    for (const line of lines) {
+        if (!line) continue;
+        for (const group of configuredGroups) {
+            if (line === normalizeText(group)) {
                 return group;
             }
         }
     }
 
-    // --------------------------------------------------------
-    // 4. Do NOT blindly trust an old group forever.
-    //
-    // If group detection has gone stale, return Unknown.
-    // --------------------------------------------------------
-
-    const GROUP_CONTEXT_TIMEOUT = 15000;
-
-    if (
-        currentGroupName !== "Unknown" &&
-        Date.now() - currentGroupDetectedAt <
-        GROUP_CONTEXT_TIMEOUT
-    ) {
-
-        return currentGroupName;
+    // 3. Check text spans inside active header
+    const candidateElements = header.querySelectorAll(
+        '[data-testid="conversation-info-header"], span[dir="auto"], span, div[role="button"]'
+    );
+    for (const el of candidateElements) {
+        const text = normalizeText(el.textContent);
+        for (const group of configuredGroups) {
+            if (text === normalizeText(group)) {
+                return group;
+            }
+        }
     }
 
     return "Unknown";
 }
 
 // ============================================================
-// CHECK WHETHER A DOCUMENT BELONGS TO A MESSAGE
-// ============================================================
-
-function getMessageContainer(button) {
-
-    if (!button) {
-        return null;
-    }
-
-    // WhatsApp message containers normally contain data-id.
-
-    const message =
-        button.closest(
-            '[data-id]'
-        );
-
-    return message || null;
-}
-
-// ============================================================
-// CREATE UNIQUE DOCUMENT KEY
-// ============================================================
-
-function createDocumentKey(button, fileName) {
-
-    if (!button) {
-        return fileName;
-    }
-
-    const message =
-        getMessageContainer(button);
-
-    if (message) {
-
-        const id =
-            message.getAttribute(
-                "data-id"
-            );
-
-        if (id) {
-
-            return (
-                id +
-                "::" +
-                fileName
-            );
-        }
-    }
-
-    // Fallback.
-
-    return fileName;
-}
-
-// ============================================================
-// CHECK WHETHER DOCUMENT WAS PROCESSED
-// ============================================================
-
-function wasProcessed(documentKey) {
-
-    return processedDocuments.has(
-        documentKey
-    );
-}
-
-// ============================================================
-// PROCESS DOCUMENT DOWNLOAD
-// ============================================================
-
-async function processDownloadButton(
-    button,
-    forceImport = false
-) {
-
-    if (!button) {
-        return;
-    }
-
-    // --------------------------------------------------------
-    // Get filename
-    // --------------------------------------------------------
-
-    const fileName =
-        getFileNameFromButton(button);
-
-    if (!fileName) {
-        return;
-    }
-
-    // --------------------------------------------------------
-    // Ignore unsupported files
-    //
-    // This automatically excludes:
-    // JPG
-    // JPEG
-    // PNG
-    // WEBP
-    // GIF
-    // MP4
-    // MP3
-    // etc.
-    // --------------------------------------------------------
-
-    if (!isSupportedFile(fileName)) {
-
-        return;
-    }
-
-    // --------------------------------------------------------
-    // Current group
-    // --------------------------------------------------------
-
-    const groupName =
-        findGroup();
-
-    if (
-        !groupName ||
-        groupName === "Unknown"
-    ) {
-
-        console.log(
-            "⏳ Sortly: current WhatsApp group not detected. Ignoring:",
-            fileName
-        );
-
-        return;
-    }
-
-    // --------------------------------------------------------
-    // Make document key
-    // --------------------------------------------------------
-
-    const documentKey =
-        createDocumentKey(
-            button,
-            fileName
-        );
-
-    // --------------------------------------------------------
-    // INITIAL IMPORT
-    // --------------------------------------------------------
-    //
-    // During Initial Import we intentionally allow documents
-    // that were already present in the baseline.
-    //
-    // This is the important fix for the old logic.
-    // --------------------------------------------------------
-
-    if (forceImport) {
-
-        if (
-            importedDocuments.has(
-                documentKey
-            )
-        ) {
-
-            return;
-        }
-
-        // Mark before sending so MutationObserver cannot
-        // trigger another import simultaneously.
-
-        importedDocuments.add(
-            documentKey
-        );
-
-        processedDocuments.add(
-            documentKey
-        );
-
-        console.log(
-            "📥 Sortly Initial Import:",
-            fileName,
-            "| Group:",
-            groupName
-        );
-
-    }
-
-    // --------------------------------------------------------
-    // LIVE MODE
-    // --------------------------------------------------------
-
-    else {
-
-        // Before baseline:
-        //
-        // Existing files are remembered.
-        // Nothing is downloaded.
-
-        if (!baselineReady) {
-
-            baselineDocuments.add(
-                documentKey
-            );
-
-            return;
-        }
-
-        // Already part of baseline.
-
-        if (
-            baselineDocuments.has(
-                documentKey
-            )
-        ) {
-
-            return;
-        }
-
-        // Already processed.
-
-        if (
-            wasProcessed(
-                documentKey
-            )
-        ) {
-
-            return;
-        }
-
-        // ----------------------------------------------------
-        // NEW DOCUMENT
-        // ----------------------------------------------------
-
-        processedDocuments.add(
-            documentKey
-        );
-
-        console.log(
-            "🆕 Sortly detected NEW document:",
-            fileName,
-            "| Group:",
-            groupName
-        );
-    }
-
-    // --------------------------------------------------------
-    // Prevent repeated processing on the same DOM button.
-    // --------------------------------------------------------
-
-    button.dataset.sortlyProcessed =
-        "true";
-
-    // --------------------------------------------------------
-    // Tell background.js
-    // --------------------------------------------------------
-
-    try {
-
-        const response =
-            await chrome.runtime.sendMessage({
-
-                type:
-                    "WHATSAPP_DOWNLOAD_STARTED",
-
-                groupName:
-                    groupName,
-
-                fileName:
-                    fileName
-            });
-
-        if (
-            response &&
-            response.ok
-        ) {
-
-            console.log(
-                "📤 Sortly sent to download pipeline:",
-                fileName,
-                "| Group:",
-                groupName
-            );
-
-        } else {
-
-            console.log(
-                "⚠️ Sortly background response:",
-                response
-            );
-
-            // If the bridge did not accept the request,
-            // allow a future retry.
-
-            processedDocuments.delete(
-                documentKey
-            );
-
-            if (forceImport) {
-                importedDocuments.delete(
-                    documentKey
-                );
-            }
-
-            delete button.dataset.sortlyProcessed;
-        }
-
-    } catch (error) {
-
-        console.error(
-            "❌ Sortly failed to contact background:",
-            error
-        );
-
-        // Allow retry.
-
-        processedDocuments.delete(
-            documentKey
-        );
-
-        if (forceImport) {
-            importedDocuments.delete(
-                documentKey
-            );
-        }
-
-        delete button.dataset.sortlyProcessed;
-    }
-}
-
-// ============================================================
-// GET ALL DOCUMENT BUTTONS
+// DOCUMENT & MESSAGE HELPERS
 // ============================================================
 
 function getDocumentButtons() {
+    const main = getActiveMainPanel();
+    if (!main) return [];
 
-    return [
-        ...document.querySelectorAll(
-            '[data-testid="document-thumb"]'
-        )
-    ];
-}
-
-// ============================================================
-// BUILD INITIAL BASELINE
-// ============================================================
-//
-// The baseline means:
-//
-// "These documents already existed when Sortly started
-// watching this conversation."
-//
-// They are NOT downloaded automatically.
-//
-// ============================================================
-
-async function buildInitialBaseline() {
-
-    if (baselineReady) {
-        return;
-    }
-
-    if (baselineBuildRunning) {
-        return;
-    }
-
-    baselineBuildRunning = true;
-
-    console.log(
-        "🧠 Sortly is learning existing documents..."
+    const elements = main.querySelectorAll(
+        '[data-testid="document-thumb"], [role="button"][title*="Download"], [title*="Download"]'
     );
+    return Array.from(elements);
+}
 
-    let attempts = 0;
+function getFileNameFromButton(button) {
+    if (!button) return null;
 
-    const maxAttempts = 30;
-
-    while (
-        !baselineReady &&
-        attempts < maxAttempts
-    ) {
-
-        attempts++;
-
-        const groupName =
-            findGroup();
-
-        const buttons =
-            getDocumentButtons();
-
-        console.log(
-            "🔎 Sortly baseline check:",
-            "Group =",
-            groupName,
-            "| Documents =",
-            buttons.length
-        );
-
-        // ----------------------------------------------------
-        // Wait for WhatsApp chat to become ready.
-        // ----------------------------------------------------
-
-        if (
-            groupName === "Unknown"
-        ) {
-
-            await new Promise(
-                resolve =>
-                    setTimeout(
-                        resolve,
-                        2000
-                    )
-            );
-
-            continue;
-        }
-
-        // ----------------------------------------------------
-        // If there are no supported documents, we can still
-        // establish the baseline.
-        //
-        // This prevents infinite retry for groups containing
-        // only images or unsupported files.
-        // ----------------------------------------------------
-
-        let supportedCount = 0;
-
-        for (
-            const button of buttons
-        ) {
-
-            const fileName =
-                getFileNameFromButton(
-                    button
-                );
-
-            if (
-                fileName &&
-                isSupportedFile(
-                    fileName
-                )
-            ) {
-
-                supportedCount++;
-            }
-        }
-
-        // Give WhatsApp a little time to render documents,
-        // but do not wait forever.
-
-        if (
-            buttons.length === 0 &&
-            attempts < 5
-        ) {
-
-            await new Promise(
-                resolve =>
-                    setTimeout(
-                        resolve,
-                        2000
-                    )
-            );
-
-            continue;
-        }
-
-        // ----------------------------------------------------
-        // Remember all existing supported documents.
-        // ----------------------------------------------------
-
-        let remembered = 0;
-
-        for (
-            const button of buttons
-        ) {
-
-            const fileName =
-                getFileNameFromButton(
-                    button
-                );
-
-            if (
-                !fileName ||
-                !isSupportedFile(
-                    fileName
-                )
-            ) {
-
-                continue;
-            }
-
-            const key =
-                createDocumentKey(
-                    button,
-                    fileName
-                );
-
-            if (
-                !baselineDocuments.has(
-                    key
-                )
-            ) {
-
-                baselineDocuments.add(
-                    key
-                );
-
-                remembered++;
-
-                button.dataset.sortlyBaseline =
-                    "true";
-
-                console.log(
-                    "🧠 Sortly remembered:",
-                    fileName
-                );
-            }
-        }
-
-        // ----------------------------------------------------
-        // Baseline complete.
-        // ----------------------------------------------------
-
-        baselineReady = true;
-
-        console.log(
-            "🧠 Sortly baseline:",
-            baselineDocuments.size,
-            "existing documents remembered."
-        );
-
-        console.log(
-            "📊 Supported documents visible:",
-            supportedCount
-        );
-
-        console.log(
-            "✅ Sortly baseline complete. NEW documents can now be downloaded automatically."
-        );
+    // 1. Title attribute
+    const title = button.getAttribute("title") || "";
+    const titleMatch = title.match(/Download\s+"(.+?)"/i) || title.match(/Download\s+(.+)/i);
+    if (titleMatch && titleMatch[1]) {
+        return normalizeText(titleMatch[1]);
     }
 
-    baselineBuildRunning = false;
+    // 2. Aria-label attribute
+    const aria = button.getAttribute("aria-label") || "";
+    const ariaMatch = aria.match(/Download\s+"(.+?)"/i) || aria.match(/Download\s+(.+)/i);
+    if (ariaMatch && ariaMatch[1]) {
+        return normalizeText(ariaMatch[1]);
+    }
+
+    // 3. Document bubble text search
+    const row = button.closest('[data-id]') || button.closest('[role="row"]');
+    if (row) {
+        const titleEls = row.querySelectorAll("[title]");
+        for (const el of titleEls) {
+            const t = normalizeText(el.getAttribute("title"));
+            if (isSupportedFile(t) && t.length < 255) {
+                return t;
+            }
+        }
+        const textElements = row.querySelectorAll("span, div");
+        for (const el of textElements) {
+            const txt = normalizeText(el.textContent);
+            if (isSupportedFile(txt) && txt.length < 255 && !txt.includes("\n")) {
+                return txt;
+            }
+        }
+    }
+
+    return null;
+}
+
+function createDocumentKey(button, fileName) {
+    const row = button.closest('[data-id]') || button.closest('[role="row"]');
+    const msgId = row ? (row.getAttribute("data-id") || row.id || "") : "";
+    return msgId ? `${msgId}::${fileName}` : fileName;
 }
 
 // ============================================================
-// INITIAL IMPORT
+// SIMULATE REAL USER CLICK & MODAL MANAGEMENT
 // ============================================================
-//
-// This is deliberately triggered by the user.
-//
-// It downloads the existing supported documents currently
-// visible in the open WhatsApp group.
-//
+
+function dispatchClick(el) {
+    if (!el) return;
+    try {
+        el.focus();
+        const eventTypes = ["pointerdown", "mousedown", "pointerup", "mouseup", "click"];
+        for (const type of eventTypes) {
+            el.dispatchEvent(new MouseEvent(type, {
+                bubbles: true,
+                cancelable: true,
+                view: window
+            }));
+        }
+    } catch (e) {
+        console.error("Error dispatching click:", e);
+    }
+}
+
+async function triggerDownload(element, fileName = "") {
+    if (!element) return;
+    try {
+        // Step 0: Fast close any lingering preview modal
+        const existingDialog = document.querySelector('div[role="dialog"]');
+        if (existingDialog) {
+            document.dispatchEvent(new KeyboardEvent('keydown', {
+                key: 'Escape',
+                code: 'Escape',
+                keyCode: 27,
+                which: 27,
+                bubbles: true
+            }));
+            await new Promise(r => setTimeout(r, 60));
+        }
+
+        // Step 1: Scroll message into view
+        element.scrollIntoView({ behavior: "auto", block: "center" });
+        await new Promise(r => setTimeout(r, 50));
+
+        // Step 2: Check if row has direct download icon
+        const row = element.closest('[data-id]') || element.closest('[role="row"]');
+        const directDownloadBtn = row ? row.querySelector('[data-icon="download"], [title*="Download"], [aria-label*="Download"]') : null;
+        const targetBtn = directDownloadBtn || element;
+
+        dispatchClick(targetBtn);
+
+        // Step 3: Check for PDF preview modal ONLY if this file is a PDF
+        const isPdf = (fileName || "").toLowerCase().endsWith(".pdf");
+        if (isPdf) {
+            let modalDownloadBtn = null;
+            // Fast poll: max 200ms
+            for (let attempt = 0; attempt < 4; attempt++) {
+                await new Promise(r => setTimeout(r, 50));
+                if (!document.querySelector('div[role="dialog"]')) {
+                    if (attempt >= 1) break;
+                    continue;
+                }
+                modalDownloadBtn = document.querySelector(
+                    'div[role="dialog"] [title*="Download"], ' +
+                    'div[role="dialog"] [data-icon="download"], ' +
+                    '[data-testid="media-viewer-download"], ' +
+                    '#app [title="Download"]:not(#main [title="Download"]), ' +
+                    'div[role="dialog"] [aria-label*="Download"]'
+                );
+                if (modalDownloadBtn) break;
+            }
+
+            if (modalDownloadBtn) {
+                console.log("📥 Detected PDF preview modal. Clicking modal download button...");
+                dispatchClick(modalDownloadBtn);
+                await new Promise(r => setTimeout(r, 100));
+
+                const closeBtn = document.querySelector(
+                    'div[role="dialog"] [title*="Close"], ' +
+                    'div[role="dialog"] [data-icon="x"], ' +
+                    'div[role="dialog"] [aria-label*="Close"], ' +
+                    '[data-testid="media-viewer-close"]'
+                );
+
+                if (closeBtn) {
+                    dispatchClick(closeBtn);
+                } else {
+                    document.dispatchEvent(new KeyboardEvent('keydown', {
+                        key: 'Escape',
+                        code: 'Escape',
+                        keyCode: 27,
+                        which: 27,
+                        bubbles: true
+                    }));
+                }
+                await new Promise(r => setTimeout(r, 60));
+            }
+        }
+    } catch (err) {
+        console.error("❌ Sortly failed to click download button:", err);
+    }
+}
+
+// ============================================================
+// BASELINE MANAGEMENT (PER GROUP, PERSISTED IN STORAGE)
+// ============================================================
+
+async function establishBaseline(groupName) {
+    const groupState = getLocalGroupState(groupName);
+    if (groupState.baselineInitialized) {
+        return;
+    }
+
+    console.log(`🧠 Establishing baseline of existing files for "${groupName}"...`);
+    await new Promise(r => setTimeout(r, 800));
+
+    if (detectActiveGroup() !== groupName) return;
+
+    const buttons = getDocumentButtons();
+    const newBaselineKeys = [];
+
+    for (const btn of buttons) {
+        const fileName = getFileNameFromButton(btn);
+        if (fileName && isSupportedFile(fileName)) {
+            const key = createDocumentKey(btn, fileName);
+            if (!newBaselineKeys.includes(key)) {
+                newBaselineKeys.push(key);
+            }
+            btn.dataset.sortlyBaseline = "true";
+        }
+    }
+
+    groupState.baselineInitialized = true;
+    groupState.baselineFileKeys = Array.from(new Set([...groupState.baselineFileKeys, ...newBaselineKeys]));
+
+    await chrome.runtime.sendMessage({
+        type: "UPDATE_GROUP_STATE",
+        groupName: groupName,
+        updates: {
+            baselineInitialized: true,
+            baselineFileKeys: groupState.baselineFileKeys
+        }
+    });
+
+    console.log(`✅ Baseline established for "${groupName}": ${newBaselineKeys.length} files protected.`);
+    updateUIBadge();
+}
+
+// ============================================================
+// LIVE MODE - PROCESS GENUINELY NEW DOCUMENTS
+// ============================================================
+
+async function processNewDocuments(groupName) {
+    await refreshStore();
+    if (localStore.runState !== "RUNNING") return;
+
+    const groupState = getLocalGroupState(groupName);
+    if (!groupState.baselineInitialized) return;
+
+    const buttons = getDocumentButtons();
+
+    for (const btn of buttons) {
+        const fileName = getFileNameFromButton(btn);
+        if (!fileName || !isSupportedFile(fileName)) continue;
+
+        const key = createDocumentKey(btn, fileName);
+
+        // Ignore existing baseline files
+        if (groupState.baselineFileKeys.includes(key)) continue;
+
+        // Ignore already processed or downloading files
+        if (groupState.processedFileKeys.includes(key) || btn.dataset.sortlyProcessed === "true") continue;
+
+        btn.dataset.sortlyProcessed = "true";
+        console.log(`🆕 Live Mode: New file detected: "${fileName}" in "${groupName}"`);
+
+        try {
+            const regRes = await chrome.runtime.sendMessage({
+                type: "REGISTER_JOB",
+                groupName: groupName,
+                fileName: fileName,
+                elementKey: key
+            });
+
+            if (regRes && regRes.ok && regRes.job) {
+                console.log(`📤 Registered job #${regRes.job.id} for "${fileName}". Triggering download...`);
+                await triggerDownload(btn, fileName);
+            } else {
+                delete btn.dataset.sortlyProcessed;
+            }
+        } catch (err) {
+            console.error(`❌ Failed to start live download for "${fileName}":`, err);
+            delete btn.dataset.sortlyProcessed;
+        }
+    }
+}
+
+// ============================================================
+// INITIAL IMPORT (SEQUENTIAL, VERIFIED TERMINAL STATES)
 // ============================================================
 
 async function startInitialImport() {
+    const groupName = detectActiveGroup();
+    if (groupName === "Unknown") {
+        alert("Sortly: Please open a configured college group first.");
+        return;
+    }
 
     if (initialImportRunning) {
-
-        console.log(
-            "⚠️ Sortly Initial Import is already running."
-        );
-
+        console.warn("⚠️ Initial Import is already in progress.");
         return;
+    }
+
+    await refreshStore();
+    if (localStore.runState === "STOPPED") {
+        await setRunState("RUNNING");
     }
 
     initialImportRunning = true;
+    console.log(`📥 Sortly Initial Import started for "${groupName}"...`);
 
-    console.log(
-        "📥 Sortly Initial Import started..."
-    );
+    const buttons = getDocumentButtons();
+    console.log(`📚 Found ${buttons.length} total document elements in view.`);
 
-    // --------------------------------------------------------
-    // Make sure baseline exists.
-    // --------------------------------------------------------
+    let processedCount = 0;
+    const seenFiles = new Set();
 
-    if (!baselineReady) {
-
-        console.log(
-            "⏳ Sortly waiting for baseline..."
-        );
-
-        await buildInitialBaseline();
-    }
-
-    // --------------------------------------------------------
-    // Detect current group again.
-    // --------------------------------------------------------
-
-    const groupName =
-        findGroup();
-
-    if (
-        !groupName ||
-        groupName === "Unknown"
-    ) {
-
-        console.log(
-            "❌ Sortly could not detect current group."
-        );
-
-        initialImportRunning = false;
-
-        return;
-    }
-
-    // --------------------------------------------------------
-    // Get current visible documents.
-    // --------------------------------------------------------
-
-    const buttons =
-        getDocumentButtons();
-
-    console.log(
-        "📚 Sortly found",
-        buttons.length,
-        "document messages."
-    );
-
-    // --------------------------------------------------------
-    // Switch to Initial Import.
-    // --------------------------------------------------------
-
-    sortlyMode =
-        "INITIAL_IMPORT";
-
-    // --------------------------------------------------------
-    // Clear import tracking for this run.
-    // --------------------------------------------------------
-
-    importedDocuments.clear();
-
-    // --------------------------------------------------------
-    // Process each supported document.
-    // --------------------------------------------------------
-
-    for (
-        const button of buttons
-    ) {
-
-        const fileName =
-            getFileNameFromButton(
-                button
-            );
-
-        if (
-            !fileName ||
-            !isSupportedFile(
-                fileName
-            )
-        ) {
-
-            // Images and unsupported files ignored.
-
-            continue;
+    for (let i = 0; i < buttons.length; i++) {
+        await refreshStore();
+        if (localStore.runState === "PAUSED" || localStore.runState === "STOPPED") {
+            console.warn(`⚠️ Initial Import suspended because Sortly is ${localStore.runState}.`);
+            break;
         }
 
-        const key =
-            createDocumentKey(
-                button,
-                fileName
-            );
-
-        // ----------------------------------------------------
-        // Already imported in this run.
-        // ----------------------------------------------------
-
-        if (
-            importedDocuments.has(
-                key
-            )
-        ) {
-
-            continue;
+        if (detectActiveGroup() !== groupName) {
+            console.warn("⚠️ Active group changed during Initial Import. Stopping.");
+            break;
         }
 
-        console.log(
-            "📥 Sortly importing:",
-            fileName,
-            "| Group:",
-            groupName
-        );
-
-        await processDownloadButton(
-            button,
-            true
-        );
-
-        // ----------------------------------------------------
-        // Small delay between downloads.
-        // ----------------------------------------------------
-
-        await new Promise(
-            resolve =>
-                setTimeout(
-                    resolve,
-                    1000
-                )
-        );
-    }
-
-    // --------------------------------------------------------
-    // Return to LIVE.
-    // --------------------------------------------------------
-
-    sortlyMode =
-        "LIVE";
-
-    initialImportRunning =
-        false;
-
-    console.log(
-        "✅ Sortly Initial Import finished."
-    );
-
-    console.log(
-        "👀 Sortly is back in LIVE mode."
-    );
-}
-
-// ============================================================
-// HANDLE NEW DOCUMENTS
-// ============================================================
-
-function processVisibleNewDocuments() {
-
-    if (!baselineReady) {
-        return;
-    }
-
-    if (initialImportRunning) {
-        return;
-    }
-
-    if (sortlyMode !== "LIVE") {
-        return;
-    }
-
-    const groupName =
-        findGroup();
-
-    if (
-        !groupName ||
-        groupName === "Unknown"
-    ) {
-
-        return;
-    }
-
-    const buttons =
-        getDocumentButtons();
-
-    for (
-        const button of buttons
-    ) {
-
-        const fileName =
-            getFileNameFromButton(
-                button
-            );
-
-        if (
-            !fileName ||
-            !isSupportedFile(
-                fileName
-            )
-        ) {
-
+        const btn = buttons[i];
+        const fileName = getFileNameFromButton(btn);
+        if (!fileName || !isSupportedFile(fileName) || seenFiles.has(fileName)) {
             continue;
         }
+        seenFiles.add(fileName);
 
-        const key =
-            createDocumentKey(
-                button,
-                fileName
-            );
+        const key = createDocumentKey(btn, fileName);
 
-        // ----------------------------------------------------
-        // Existing baseline document.
-        // ----------------------------------------------------
+        // Step 0: Check if file already exists in destination folder
+        try {
+            const checkRes = await chrome.runtime.sendMessage({
+                type: "CHECK_FILE_EXISTS",
+                groupName: groupName,
+                fileName: fileName
+            });
 
-        if (
-            baselineDocuments.has(
-                key
-            )
-        ) {
+            if (checkRes && checkRes.exists) {
+                console.log(`⚡ "${fileName}" already exists in subject folder. Skipping download.`);
+                importProgressText = `Already organized (${i + 1}/${buttons.length}): ${fileName}`;
+                updateUIBadge();
+                processedCount++;
 
-            continue;
-        }
-
-        // ----------------------------------------------------
-        // Already processed.
-        // ----------------------------------------------------
-
-        if (
-            processedDocuments.has(
-                key
-            )
-        ) {
-
-            continue;
-        }
-
-        processDownloadButton(
-            button,
-            false
-        );
-    }
-}
-
-// ============================================================
-// MUTATION OBSERVER
-// ============================================================
-
-const observer =
-    new MutationObserver(
-        mutations => {
-
-            let foundDocument =
-                false;
-
-            for (
-                const mutation of mutations
-            ) {
-
-                for (
-                    const node of mutation.addedNodes
-                ) {
-
-                    if (
-                        node.nodeType !==
-                        Node.ELEMENT_NODE
-                    ) {
-
-                        continue;
-                    }
-
-                    // Direct document button.
-
-                    if (
-                        node.matches &&
-                        node.matches(
-                            '[data-testid="document-thumb"]'
-                        )
-                    ) {
-
-                        foundDocument = true;
-                    }
-
-                    // Document button somewhere inside
-                    // the newly-added node.
-
-                    if (
-                        node.querySelector &&
-                        node.querySelector(
-                            '[data-testid="document-thumb"]'
-                        )
-                    ) {
-
-                        foundDocument = true;
-                    }
+                const groupState = getLocalGroupState(groupName);
+                if (!groupState.processedFileKeys.includes(key)) {
+                    groupState.processedFileKeys.push(key);
                 }
+                const clean = stripDuplicateSuffix(fileName);
+                if (!groupState.organizedFiles.includes(clean)) {
+                    groupState.organizedFiles.push(clean);
+                }
+                continue;
             }
-
-            if (!foundDocument) {
-                return;
-            }
-
-            // ------------------------------------------------
-            // Before baseline:
-            // only learn existing documents.
-            // ------------------------------------------------
-
-            if (!baselineReady) {
-
-                buildInitialBaseline();
-
-                return;
-            }
-
-            // ------------------------------------------------
-            // LIVE:
-            // process new documents.
-            // ------------------------------------------------
-
-            if (
-                sortlyMode === "LIVE" &&
-                !initialImportRunning
-            ) {
-
-                // Small delay gives WhatsApp time to finish
-                // constructing the message DOM.
-
-                setTimeout(
-                    () => {
-                        processVisibleNewDocuments();
-                    },
-                    300
-                );
-            }
+        } catch (e) {
+            // Proceed to download
         }
-    );
 
-// ============================================================
-// START OBSERVER
-// ============================================================
+        importProgressText = `Processing (${i + 1}/${buttons.length}): ${fileName}`;
+        updateUIBadge();
 
-observer.observe(
-    document.body,
-    {
-        childList: true,
-        subtree: true
+        try {
+            // Register pipeline job
+            const regRes = await chrome.runtime.sendMessage({
+                type: "REGISTER_JOB",
+                groupName: groupName,
+                fileName: fileName,
+                elementKey: key
+            });
+
+            if (regRes && regRes.ok && regRes.job) {
+                // Trigger download
+                await triggerDownload(btn, fileName);
+
+                // Await verified terminal state (ORGANIZED or FAILED)
+                const waitRes = await chrome.runtime.sendMessage({
+                    type: "AWAIT_JOB",
+                    jobId: regRes.job.id,
+                    timeout: 25000
+                });
+
+                if (waitRes && waitRes.ok) {
+                    console.log(`🎉 Confirmed ORGANIZED: "${fileName}"`);
+                    processedCount++;
+                } else {
+                    console.error(`⚠️ Job did not reach ORGANIZED state for "${fileName}":`, waitRes);
+                }
+
+                await new Promise(r => setTimeout(r, 60));
+            }
+        } catch (err) {
+            console.error(`❌ Initial Import failed for "${fileName}":`, err);
+        }
     }
-);
+
+    initialImportRunning = false;
+    importProgressText = "";
+
+    await refreshStore();
+    // Only mark completed if import was not stopped/paused midway
+    if (localStore.runState === "RUNNING") {
+        await chrome.runtime.sendMessage({
+            type: "MARK_IMPORT_COMPLETED",
+            groupName: groupName
+        });
+        await refreshStore();
+        console.log(`✅ Initial Import completed & persisted for "${groupName}".`);
+    }
+
+    updateUIBadge();
+}
 
 // ============================================================
-// STARTUP
+// OPERATING CONTROLS (START, PAUSE, RESUME, STOP)
 // ============================================================
 
-console.log(
-    "👀 Sortly is watching for NEW college documents."
-);
+async function setRunState(newState) {
+    const res = await chrome.runtime.sendMessage({
+        type: "SET_RUN_STATE",
+        runState: newState
+    });
+    if (res && res.ok) {
+        localStore.runState = newState;
+        updateUIBadge();
+    }
+}
 
-console.log(
-    "🔄 LIVE MODE: existing documents will not be downloaded."
-);
+// Manual click interceptor
+document.addEventListener("click", (e) => {
+    const groupName = detectActiveGroup();
+    if (groupName === "Unknown") return;
 
-console.log(
-    "🖼️ Images are excluded."
-);
+    const target = e.target;
+    if (!target) return;
 
-console.log(
-    "📁 Supported: PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, TXT, ZIP."
-);
+    const downloadTarget = target.closest(
+        '[data-testid="document-thumb"], [data-icon="download"], [title*="Download"], [aria-label*="Download"], [role="button"]'
+    );
+    if (!downloadTarget) return;
 
-// ============================================================
-// BUILD BASELINE AFTER WHATSAPP LOADS
-// ============================================================
+    const fileName = getFileNameFromButton(downloadTarget);
+    if (!fileName || !isSupportedFile(fileName)) return;
 
-setTimeout(
-    () => {
+    console.log(`👆 User clicked document manually: "${fileName}" in "${groupName}"`);
+    chrome.runtime.sendMessage({
+        type: "REGISTER_JOB",
+        groupName: groupName,
+        fileName: fileName,
+        elementKey: createDocumentKey(downloadTarget, fileName)
+    });
+}, true);
 
-        buildInitialBaseline();
-
-    },
-    2500
-);
-
-// ============================================================
-// OPTIONAL GLOBAL FUNCTION
-// ============================================================
-//
-// NOTE:
-// This function lives inside the content-script world.
-//
-// It normally cannot be called directly from the normal PAGE
-// DevTools console because Chrome isolates content scripts.
-//
-// A proper extension popup/button can call this later.
-//
-// ============================================================
-
-window.SortlyInitialImport =
-    function () {
-
-        console.log(
-            "📥 Sortly Initial Import requested."
-        );
-
-        startInitialImport();
-    };
+// Runtime message receiver (active group inquiry)
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message && message.type === "GET_CURRENT_GROUP") {
+        sendResponse({ groupName: detectActiveGroup() });
+        return true;
+    }
+});
 
 // ============================================================
-// FINAL STARTUP MESSAGE
+// MAIN OBSERVER LOOP
 // ============================================================
 
-console.log(
-    "✅ Sortly content.js ready."
-);
+async function checkActiveConversation() {
+    const currentGroup = detectActiveGroup();
 
-console.log(
-    "📌 Initial Import function prepared."
-);
+    if (currentGroup !== activeGroupName) {
+        if (currentGroup !== "Unknown") {
+            console.log(`🎯 Active configured group: "${currentGroup}"`);
+            activeGroupName = currentGroup;
+            await refreshStore();
+            const groupState = getLocalGroupState(currentGroup);
+            if (!groupState.baselineInitialized) {
+                await establishBaseline(currentGroup);
+            }
+        } else {
+            activeGroupName = "Unknown";
+        }
+        updateUIBadge();
+    }
+
+    if (activeGroupName !== "Unknown" && !initialImportRunning) {
+        await processNewDocuments(activeGroupName);
+    }
+}
+
+let debounceTimer = null;
+const observer = new MutationObserver(() => {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+        checkActiveConversation();
+    }, 400);
+});
+
+observer.observe(document.body, { childList: true, subtree: true });
+setInterval(checkActiveConversation, 1500);
+
+// ============================================================
+// STATUS BADGE UI & CONTROLS
+// ============================================================
+
+function createUIBadge() {
+    if (document.getElementById("sortly-status-badge")) return;
+
+    const badge = document.createElement("div");
+    badge.id = "sortly-status-badge";
+    badge.style.position = "fixed";
+    badge.style.bottom = "16px";
+    badge.style.right = "16px";
+    badge.style.zIndex = "999999";
+    badge.style.padding = "10px 14px";
+    badge.style.borderRadius = "10px";
+    badge.style.backgroundColor = "rgba(17, 27, 33, 0.94)";
+    badge.style.color = "#e9edef";
+    badge.style.fontSize = "13px";
+    badge.style.fontFamily = "Segoe UI, sans-serif";
+    badge.style.boxShadow = "0 4px 14px rgba(0,0,0,0.4)";
+    badge.style.display = "flex";
+    badge.style.alignItems = "center";
+    badge.style.gap = "10px";
+    badge.style.border = "1px solid rgba(255,255,255,0.18)";
+    badge.style.backdropFilter = "blur(6px)";
+
+    document.body.appendChild(badge);
+    updateUIBadge();
+}
+
+function updateUIBadge() {
+    const badge = document.getElementById("sortly-status-badge");
+    if (!badge) return;
+
+    // 1. Bridge offline
+    if (!bridgeOnline) {
+        badge.innerHTML = `
+            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#ff5252;box-shadow:0 0 8px #ff5252;"></span>
+            <div>
+                <div style="color:#ff5252;font-weight:600;">Sortly: Python Bridge Offline</div>
+                <div style="font-size:11px;color:#8696a0;">Run start_organizer.bat to activate</div>
+            </div>
+        `;
+        return;
+    }
+
+    // 2. Idle (no configured group open)
+    if (activeGroupName === "Unknown") {
+        badge.innerHTML = `
+            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#8696a0;"></span>
+            <div>
+                <div>Sortly: <strong>Idle</strong></div>
+                <div style="font-size:11px;color:#8696a0;">Open a configured college group</div>
+            </div>
+        `;
+        return;
+    }
+
+    const groupState = getLocalGroupState(activeGroupName);
+    const runState = localStore.runState;
+
+    // Helper button styles
+    const btnStyle = (bg, color) => `
+        background: ${bg};
+        color: ${color};
+        border: none;
+        border-radius: 6px;
+        padding: 4px 8px;
+        font-weight: 600;
+        font-size: 11px;
+        cursor: pointer;
+        margin-left: 4px;
+    `;
+
+    // 3. Initial Import Running
+    if (initialImportRunning) {
+        badge.innerHTML = `
+            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#53bdeb;box-shadow:0 0 8px #53bdeb;"></span>
+            <div>
+                <div><strong>Sortly Importing:</strong> ${activeGroupName}</div>
+                <div style="font-size:11px;color:#53bdeb;">${importProgressText || 'Processing...'}</div>
+            </div>
+            <button id="sortly-pause-btn" style="${btnStyle('#f39c12', '#fff')}">Pause</button>
+            <button id="sortly-stop-btn" style="${btnStyle('#e74c3c', '#fff')}">Stop</button>
+        `;
+        badge.querySelector("#sortly-pause-btn")?.addEventListener("click", () => setRunState("PAUSED"));
+        badge.querySelector("#sortly-stop-btn")?.addEventListener("click", () => setRunState("STOPPED"));
+        return;
+    }
+
+    // 4. STOPPED State
+    if (runState === "STOPPED") {
+        badge.innerHTML = `
+            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#8696a0;"></span>
+            <div>
+                <div><strong>Sortly Stopped:</strong> ${activeGroupName}</div>
+                <div style="font-size:11px;color:#8696a0;">Automation halted</div>
+            </div>
+            <button id="sortly-start-btn" style="${btnStyle('#00a884', '#111b21')}">Start</button>
+            ${!groupState.importCompleted ? `<button id="sortly-import-btn" style="${btnStyle('#53bdeb', '#111b21')}">Initial Import</button>` : ''}
+        `;
+        badge.querySelector("#sortly-start-btn")?.addEventListener("click", () => setRunState("RUNNING"));
+        badge.querySelector("#sortly-import-btn")?.addEventListener("click", startInitialImport);
+        return;
+    }
+
+    // 5. PAUSED State
+    if (runState === "PAUSED") {
+        badge.innerHTML = `
+            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#f39c12;box-shadow:0 0 8px #f39c12;"></span>
+            <div>
+                <div><strong>Sortly Paused:</strong> ${activeGroupName}</div>
+                <div style="font-size:11px;color:#f39c12;">Work paused (state preserved)</div>
+            </div>
+            <button id="sortly-resume-btn" style="${btnStyle('#00a884', '#111b21')}">Resume</button>
+            <button id="sortly-stop-btn" style="${btnStyle('#e74c3c', '#fff')}">Stop</button>
+        `;
+        badge.querySelector("#sortly-resume-btn")?.addEventListener("click", () => setRunState("RUNNING"));
+        badge.querySelector("#sortly-stop-btn")?.addEventListener("click", () => setRunState("STOPPED"));
+        return;
+    }
+
+    // 6. RUNNING State - Group Import Completed (LIVE MODE)
+    if (groupState.importCompleted) {
+        badge.innerHTML = `
+            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#00a884;box-shadow:0 0 8px #00a884;"></span>
+            <div>
+                <div><strong>Sortly Live:</strong> ${activeGroupName}</div>
+                <div style="font-size:11px;color:#00a884;">All files organized ✔ Watching for new files</div>
+            </div>
+            <button id="sortly-pause-btn" style="${btnStyle('transparent', '#8696a0')};border:1px solid rgba(255,255,255,0.2);">Pause</button>
+            <button id="sortly-stop-btn" style="${btnStyle('transparent', '#8696a0')};border:1px solid rgba(255,255,255,0.2);">Stop</button>
+            <button id="sortly-resync-btn" style="${btnStyle('transparent', '#8696a0')};border:1px solid rgba(255,255,255,0.2);" title="Re-scan group files">Re-Sync</button>
+        `;
+        badge.querySelector("#sortly-pause-btn")?.addEventListener("click", () => setRunState("PAUSED"));
+        badge.querySelector("#sortly-stop-btn")?.addEventListener("click", () => setRunState("STOPPED"));
+        badge.querySelector("#sortly-resync-btn")?.addEventListener("click", startInitialImport);
+        return;
+    }
+
+    // 7. RUNNING State - Group Needs Initial Import
+    badge.innerHTML = `
+        <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#00a884;box-shadow:0 0 8px #00a884;"></span>
+        <div>
+            <div><strong>Sortly Active:</strong> ${activeGroupName}</div>
+            <div style="font-size:11px;color:#8696a0;">Baseline active • Initial Import available</div>
+        </div>
+        <button id="sortly-import-btn" style="${btnStyle('#00a884', '#111b21')}">Initial Import</button>
+        <button id="sortly-pause-btn" style="${btnStyle('transparent', '#8696a0')};border:1px solid rgba(255,255,255,0.2);">Pause</button>
+        <button id="sortly-stop-btn" style="${btnStyle('transparent', '#8696a0')};border:1px solid rgba(255,255,255,0.2);">Stop</button>
+    `;
+    badge.querySelector("#sortly-import-btn")?.addEventListener("click", startInitialImport);
+    badge.querySelector("#sortly-pause-btn")?.addEventListener("click", () => setRunState("PAUSED"));
+    badge.querySelector("#sortly-stop-btn")?.addEventListener("click", () => setRunState("STOPPED"));
+}
+
+// Initial boot
+refreshStore().then(() => {
+    setInterval(pollBridgeStatus, 3000);
+    pollBridgeStatus();
+    setTimeout(createUIBadge, 2000);
+});

@@ -768,3 +768,491 @@
 [2026-09-28 14:56:22] Listening on http://127.0.0.1:8765
 [2026-09-28 18:51:08] WhatsApp Organizer Bridge starting...
 [2026-09-28 18:51:08] Listening on http://127.0.0.1:8765
+[2026-09-29 13:54:35] WhatsApp Organizer Bridge starting...
+[2026-09-29 13:54:35] Listening on http://127.0.0.1:8765
+[2026-09-29 18:00:19] WhatsApp Organizer Bridge starting...
+[2026-09-29 18:00:19] Listening on http://127.0.0.1:8765
+[2026-09-29 18:04:02] REQUEST: group=S-3 MFE Lateral, file=M-2 Case studies.docx
+[2026-09-29 18:04:02] Waiting for file in Downloads: M-2 Case studies.docx
+[2026-09-29 18:04:02] File found: C:\Users\Charan\Downloads\M-2 Case studies.docx
+[2026-09-29 18:04:02] Checking download completion: C:\Users\Charan\Downloads\M-2 Case studies.docx
+[2026-09-29 18:04:04] Download complete: C:\Users\Charan\Downloads\M-2 Case studies.docx
+[2026-09-29 18:04:04] COPIED: C:\Users\Charan\Downloads\M-2 Case studies.docx -> E:\College Files\MATHS FOR ENGINER\M-2 Case studies.docx
+[2026-09-29 18:04:04] SUCCESS: E:\College Files\MATHS FOR ENGINER\M-2 Case studies.docx
+[2026-09-29 19:19:53] WhatsApp Organizer Bridge starting...
+[2026-09-29 19:19:53] Listening on http://127.0.0.1:8765
+[2026-09-30 09:26:33] WhatsApp Organizer Bridge starting...
+[2026-09-30 09:26:33] Listening on http://127.0.0.1:8765
+[2026-09-30 11:13:59] WhatsApp Organizer Bridge starting...
+[2026-09-30 11:13:59] Listening on http://127.0.0.1:8765
+[2026-09-30 13:13:24] WhatsApp Organizer Bridge starting...
+[2026-09-30 13:13:24] Listening on http://127.0.0.1:8765
+[2026-09-30 20:00:57] WhatsApp Organizer Bridge starting...
+[2026-09-30 20:00:57] Listening on http://127.0.0.1:8765
+[2026-09-30 20:05:46] REQUEST: group=25CS2102L, file=sortly_test_doc.pdf
+[2026-09-30 20:05:46] Waiting for file in Downloads: sortly_test_doc.pdf
+[2026-09-30 20:05:46] File found: C:\Users\Charan\Downloads\sortly_test_doc.pdf
+[2026-09-30 20:05:46] Checking download completion: C:\Users\Charan\Downloads\sortly_test_doc.pdf
+[2026-09-30 20:05:48] Download complete: C:\Users\Charan\Downloads\sortly_test_doc.pdf
+[2026-09-30 20:05:48] COPIED: C:\Users\Charan\Downloads\sortly_test_doc.pdf -> E:\College Files\OS\sortly_test_doc.pdf
+[2026-09-30 20:05:48] SUCCESS: E:\College Files\OS\sortly_test_doc.pdf
+[2026-09-30 20:07:28] COPIED: C:\Users\Charan\AppData\Local\Temp\tmpheyraywl\sample.txt -> C:\Users\Charan\AppData\Local\Temp\tmpheyraywl\dest\sample.txt
+[2026-09-30 20:07:28] Same filename exists: C:\Users\Charan\AppData\Local\Temp\tmpheyraywl\dest\sample.txt
+[2026-09-30 20:07:28] DUPLICATE CONTENT - already exists: C:\Users\Charan\AppData\Local\Temp\tmpheyraywl\dest\sample.txt
+[2026-09-30 20:07:28] Same filename exists: C:\Users\Charan\AppData\Local\Temp\tmpheyraywl\dest\sample.txt
+[2026-09-30 20:07:28] COPIED: C:\Users\Charan\AppData\Local\Temp\tmpheyraywl\sample.txt -> C:\Users\Charan\AppData\Local\Temp\tmpheyraywl\dest\sample (1).txt
+[2026-09-30 20:12:35] WhatsApp Organizer Bridge starting...
+[2026-09-30 20:12:35] Listening on http://127.0.0.1:8765
+[2026-09-30 20:15:49] REQUEST: group=ESD&IoT LE, file=CO 3 - 3.4 QA.docx
+[2026-09-30 20:15:49] Waiting for file in Downloads: CO 3 - 3.4 QA.docx
+[2026-09-30 20:15:49] File found: C:\Users\Charan\Downloads\CO 3 - 3.4 QA.docx
+[2026-09-30 20:15:49] Checking download completion: C:\Users\Charan\Downloads\CO 3 - 3.4 QA.docx
+[2026-09-30 20:15:51] Download complete: C:\Users\Charan\Downloads\CO 3 - 3.4 QA.docx
+[2026-09-30 20:15:51] COPIED: C:\Users\Charan\Downloads\CO 3 - 3.4 QA.docx -> E:\College Files\IoT\CO 3 - 3.4 QA.docx
+[2026-09-30 20:15:51] SUCCESS: E:\College Files\IoT\CO 3 - 3.4 QA.docx
+[2026-09-30 20:21:53] REQUEST: group=ESD&IoT LE, file=CO 3 3.4 1kHz_Timer_Tick.docx
+[2026-09-30 20:21:53] Waiting for file in Downloads: CO 3 3.4 1kHz_Timer_Tick.docx
+[2026-09-30 20:21:53] File found: C:\Users\Charan\Downloads\CO 3 3.4 1kHz_Timer_Tick.docx
+[2026-09-30 20:21:53] Checking download completion: C:\Users\Charan\Downloads\CO 3 3.4 1kHz_Timer_Tick.docx
+[2026-09-30 20:21:56] Download complete: C:\Users\Charan\Downloads\CO 3 3.4 1kHz_Timer_Tick.docx
+[2026-09-30 20:21:56] COPIED: C:\Users\Charan\Downloads\CO 3 3.4 1kHz_Timer_Tick.docx -> E:\College Files\IoT\CO 3 3.4 1kHz_Timer_Tick.docx
+[2026-09-30 20:21:56] SUCCESS: E:\College Files\IoT\CO 3 3.4 1kHz_Timer_Tick.docx
+[2026-09-30 20:22:05] REQUEST: group=ESD&IoT LE, file=CO 3 - 3.3 QA.docx
+[2026-09-30 20:22:05] Waiting for file in Downloads: CO 3 - 3.3 QA.docx
+[2026-09-30 20:22:05] File found: C:\Users\Charan\Downloads\CO 3 - 3.3 QA.docx
+[2026-09-30 20:22:05] Checking download completion: C:\Users\Charan\Downloads\CO 3 - 3.3 QA.docx
+[2026-09-30 20:22:07] Download complete: C:\Users\Charan\Downloads\CO 3 - 3.3 QA.docx
+[2026-09-30 20:22:07] COPIED: C:\Users\Charan\Downloads\CO 3 - 3.3 QA.docx -> E:\College Files\IoT\CO 3 - 3.3 QA.docx
+[2026-09-30 20:22:07] SUCCESS: E:\College Files\IoT\CO 3 - 3.3 QA.docx
+[2026-09-30 20:49:36] REQUEST: group=Y25-Mathematics for Data Science, file=CO3-25MT1306-MDA-KBR.pdf
+[2026-09-30 20:49:36] Waiting for file in Downloads: CO3-25MT1306-MDA-KBR.pdf
+[2026-09-30 20:49:36] File found: C:\Users\Charan\Downloads\CO3-25MT1306-MDA-KBR.pdf
+[2026-09-30 20:49:36] Checking download completion: C:\Users\Charan\Downloads\CO3-25MT1306-MDA-KBR.pdf
+[2026-09-30 20:49:38] Download complete: C:\Users\Charan\Downloads\CO3-25MT1306-MDA-KBR.pdf
+[2026-09-30 20:49:38] COPIED: C:\Users\Charan\Downloads\CO3-25MT1306-MDA-KBR.pdf -> E:\College Files\Maths DS\CO3-25MT1306-MDA-KBR.pdf
+[2026-09-30 20:49:38] SUCCESS: E:\College Files\Maths DS\CO3-25MT1306-MDA-KBR.pdf
+[2026-09-30 20:50:22] REQUEST: group=Y25-Mathematics for Data Science, file=covariancematrix_formatted_final.pdf
+[2026-09-30 20:50:22] Waiting for file in Downloads: covariancematrix_formatted_final.pdf
+[2026-09-30 20:50:22] File found: C:\Users\Charan\Downloads\covariancematrix_formatted_final.pdf
+[2026-09-30 20:50:22] Checking download completion: C:\Users\Charan\Downloads\covariancematrix_formatted_final.pdf
+[2026-09-30 20:50:24] Download complete: C:\Users\Charan\Downloads\covariancematrix_formatted_final.pdf
+[2026-09-30 20:50:24] Same filename exists: E:\College Files\Maths DS\covariancematrix_formatted_final.pdf
+[2026-09-30 20:50:24] DUPLICATE CONTENT - already exists: E:\College Files\Maths DS\covariancematrix_formatted_final.pdf
+[2026-09-30 20:50:24] SUCCESS: E:\College Files\Maths DS\covariancematrix_formatted_final.pdf
+[2026-09-30 20:50:28] REQUEST: group=Y25-Mathematics for Data Science, file=gamma-beta-distribution.pdf
+[2026-09-30 20:50:28] Waiting for file in Downloads: gamma-beta-distribution.pdf
+[2026-09-30 20:50:28] File found: C:\Users\Charan\Downloads\gamma-beta-distribution.pdf
+[2026-09-30 20:50:28] Checking download completion: C:\Users\Charan\Downloads\gamma-beta-distribution.pdf
+[2026-09-30 20:50:30] Download complete: C:\Users\Charan\Downloads\gamma-beta-distribution.pdf
+[2026-09-30 20:50:30] Same filename exists: E:\College Files\Maths DS\gamma-beta-distribution.pdf
+[2026-09-30 20:50:30] DUPLICATE CONTENT - already exists: E:\College Files\Maths DS\gamma-beta-distribution.pdf
+[2026-09-30 20:50:30] SUCCESS: E:\College Files\Maths DS\gamma-beta-distribution.pdf
+[2026-09-30 20:50:39] REQUEST: group=Y25-Mathematics for Data Science, file=Z_Test_p_Value_Method.pdf
+[2026-09-30 20:50:39] Waiting for file in Downloads: Z_Test_p_Value_Method.pdf
+[2026-09-30 20:50:39] File found: C:\Users\Charan\Downloads\Z_Test_p_Value_Method.pdf
+[2026-09-30 20:50:39] Checking download completion: C:\Users\Charan\Downloads\Z_Test_p_Value_Method.pdf
+[2026-09-30 20:50:41] Download complete: C:\Users\Charan\Downloads\Z_Test_p_Value_Method.pdf
+[2026-09-30 20:50:41] COPIED: C:\Users\Charan\Downloads\Z_Test_p_Value_Method.pdf -> E:\College Files\Maths DS\Z_Test_p_Value_Method.pdf
+[2026-09-30 20:50:41] SUCCESS: E:\College Files\Maths DS\Z_Test_p_Value_Method.pdf
+[2026-09-30 20:50:51] REQUEST: group=Y25-Mathematics for Data Science, file=Chi-Squared-Tests-Complete.pdf
+[2026-09-30 20:50:51] Waiting for file in Downloads: Chi-Squared-Tests-Complete.pdf
+[2026-09-30 20:50:51] File found: C:\Users\Charan\Downloads\Chi-Squared-Tests-Complete.pdf
+[2026-09-30 20:50:51] Checking download completion: C:\Users\Charan\Downloads\Chi-Squared-Tests-Complete.pdf
+[2026-09-30 20:50:53] Download complete: C:\Users\Charan\Downloads\Chi-Squared-Tests-Complete.pdf
+[2026-09-30 20:50:53] COPIED: C:\Users\Charan\Downloads\Chi-Squared-Tests-Complete.pdf -> E:\College Files\Maths DS\Chi-Squared-Tests-Complete.pdf
+[2026-09-30 20:50:53] SUCCESS: E:\College Files\Maths DS\Chi-Squared-Tests-Complete.pdf
+[2026-09-30 20:51:36] REQUEST: group=Y25-Mathematics for Data Science, file=CO3-25MT1306-MDA-KBR.pdf
+[2026-09-30 20:51:36] Waiting for file in Downloads: CO3-25MT1306-MDA-KBR.pdf
+[2026-09-30 20:51:38] REQUEST: group=Y25-Mathematics for Data Science, file=Z_Test_p_Value_Method.pdf
+[2026-09-30 20:51:38] Waiting for file in Downloads: Z_Test_p_Value_Method.pdf
+[2026-09-30 20:51:38] File found: C:\Users\Charan\Downloads\Z_Test_p_Value_Method.pdf
+[2026-09-30 20:51:38] Checking download completion: C:\Users\Charan\Downloads\Z_Test_p_Value_Method.pdf
+[2026-09-30 20:51:40] Download complete: C:\Users\Charan\Downloads\Z_Test_p_Value_Method.pdf
+[2026-09-30 20:51:40] Same filename exists: E:\College Files\Maths DS\Z_Test_p_Value_Method.pdf
+[2026-09-30 20:51:40] DUPLICATE CONTENT - already exists: E:\College Files\Maths DS\Z_Test_p_Value_Method.pdf
+[2026-09-30 20:51:40] SUCCESS: E:\College Files\Maths DS\Z_Test_p_Value_Method.pdf
+[2026-09-30 20:51:40] REQUEST: group=Y25-Mathematics for Data Science, file=Chi-Squared-Tests-Complete.pdf
+[2026-09-30 20:51:40] Waiting for file in Downloads: Chi-Squared-Tests-Complete.pdf
+[2026-09-30 20:51:40] File found: C:\Users\Charan\Downloads\Chi-Squared-Tests-Complete.pdf
+[2026-09-30 20:51:40] Checking download completion: C:\Users\Charan\Downloads\Chi-Squared-Tests-Complete.pdf
+[2026-09-30 20:51:42] Download complete: C:\Users\Charan\Downloads\Chi-Squared-Tests-Complete.pdf
+[2026-09-30 20:51:42] Same filename exists: E:\College Files\Maths DS\Chi-Squared-Tests-Complete.pdf
+[2026-09-30 20:51:42] DUPLICATE CONTENT - already exists: E:\College Files\Maths DS\Chi-Squared-Tests-Complete.pdf
+[2026-09-30 20:51:42] SUCCESS: E:\College Files\Maths DS\Chi-Squared-Tests-Complete.pdf
+[2026-09-30 20:52:06] TIMEOUT: File not found: CO3-25MT1306-MDA-KBR.pdf
+[2026-09-30 20:59:41] WhatsApp Organizer Bridge starting...
+[2026-09-30 20:59:41] Listening on http://127.0.0.1:8765
+[2026-09-30 21:04:49] WhatsApp Organizer Bridge starting...
+[2026-09-30 21:04:49] Listening on http://127.0.0.1:8765
+[2026-09-30 21:11:53] WhatsApp Organizer Bridge starting...
+[2026-09-30 21:11:53] Listening on http://127.0.0.1:8765
+[2026-09-30 21:28:33] WhatsApp Organizer Bridge starting...
+[2026-09-30 21:28:33] Listening on http://127.0.0.1:8765
+[2026-10-01 07:20:32] WhatsApp Organizer Bridge starting...
+[2026-10-01 07:20:32] Listening on http://127.0.0.1:8765
+[2026-10-01 07:33:06] WhatsApp Organizer Bridge starting...
+[2026-10-01 07:33:06] Listening on http://127.0.0.1:8765
+[2026-10-05 14:13:20] WhatsApp Organizer Bridge starting...
+[2026-10-05 14:13:20] Listening on http://127.0.0.1:8765
+[2026-10-06 18:41:48] WhatsApp Organizer Bridge starting...
+[2026-10-06 18:41:48] Listening on http://127.0.0.1:8765
+[2026-10-06 21:30:43] WhatsApp Organizer Bridge starting...
+[2026-10-06 21:30:43] Listening on http://127.0.0.1:8765
+[2026-10-07 07:18:25] WhatsApp Organizer Bridge starting...
+[2026-10-07 07:18:25] Listening on http://127.0.0.1:8765
+[2026-10-07 09:21:03] WhatsApp Organizer Bridge starting...
+[2026-10-07 09:21:03] Listening on http://127.0.0.1:8765
+[2026-10-07 11:26:38] WhatsApp Organizer Bridge starting...
+[2026-10-07 11:26:38] Listening on http://127.0.0.1:8765
+[2026-10-07 15:08:57] WhatsApp Organizer Bridge starting...
+[2026-10-07 15:08:57] Listening on http://127.0.0.1:8765
+[2026-10-07 18:45:32] WhatsApp Organizer Bridge starting...
+[2026-10-07 18:45:32] Listening on http://127.0.0.1:8765
+[2026-10-07 18:53:45] WhatsApp Organizer Bridge starting...
+[2026-10-07 18:53:45] Listening on http://127.0.0.1:8765
+[2026-10-08 07:15:21] WhatsApp Organizer Bridge starting...
+[2026-10-08 07:15:21] Listening on http://127.0.0.1:8765
+[2026-10-08 09:12:30] WhatsApp Organizer Bridge starting...
+[2026-10-08 09:12:30] Listening on http://127.0.0.1:8765
+[2026-10-08 11:16:00] WhatsApp Organizer Bridge starting...
+[2026-10-08 11:16:00] Listening on http://127.0.0.1:8765
+[2026-10-08 12:37:01] WhatsApp Organizer Bridge starting...
+[2026-10-08 12:37:01] Listening on http://127.0.0.1:8765
+[2026-10-08 13:57:47] WhatsApp Organizer Bridge starting...
+[2026-10-08 13:57:47] Listening on http://127.0.0.1:8765
+[2026-10-09 11:21:55] WhatsApp Organizer Bridge starting...
+[2026-10-09 11:21:55] Listening on http://127.0.0.1:8765
+[2026-10-09 12:27:15] WhatsApp Organizer Bridge starting...
+[2026-10-09 12:27:15] Listening on http://127.0.0.1:8765
+[2026-10-09 12:34:03] WhatsApp Organizer Bridge starting...
+[2026-10-09 12:34:03] Listening on http://127.0.0.1:8765
+[2026-10-09 12:35:03] WhatsApp Organizer Bridge starting...
+[2026-10-09 12:35:03] Listening on http://127.0.0.1:8765
+[2026-10-09 13:01:05] WhatsApp Organizer Bridge starting...
+[2026-10-09 13:01:05] Listening on http://127.0.0.1:8765
+[2026-10-09 13:06:27] REQUEST: group=25CS2102L, file=sortly_test_doc.docx
+[2026-10-09 13:06:27] Waiting for file in Downloads: sortly_test_doc.docx
+[2026-10-09 13:06:27] File found: C:\Users\Charan\Downloads\sortly_test_doc.docx
+[2026-10-09 13:06:27] Checking download completion: C:\Users\Charan\Downloads\sortly_test_doc.docx
+[2026-10-09 13:06:29] Download complete: C:\Users\Charan\Downloads\sortly_test_doc.docx
+[2026-10-09 13:06:29] COPIED: C:\Users\Charan\Downloads\sortly_test_doc.docx -> E:\College Files\OS\sortly_test_doc.docx
+[2026-10-09 13:06:29] SUCCESS: E:\College Files\OS\sortly_test_doc.docx
+[2026-10-09 13:06:29] REQUEST: group=25CS2102L, file=sortly_test_doc.docx
+[2026-10-09 13:06:29] Waiting for file in Downloads: sortly_test_doc.docx
+[2026-10-09 13:06:29] File found: C:\Users\Charan\Downloads\sortly_test_doc.docx
+[2026-10-09 13:06:29] Checking download completion: C:\Users\Charan\Downloads\sortly_test_doc.docx
+[2026-10-09 13:06:31] Download complete: C:\Users\Charan\Downloads\sortly_test_doc.docx
+[2026-10-09 13:06:31] Same filename exists: E:\College Files\OS\sortly_test_doc.docx
+[2026-10-09 13:06:31] DUPLICATE CONTENT - already exists: E:\College Files\OS\sortly_test_doc.docx
+[2026-10-09 13:06:31] SUCCESS: E:\College Files\OS\sortly_test_doc.docx
+[2026-10-09 13:15:10] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=co3ACtasks_1-5.docx
+[2026-10-09 13:15:10] Waiting for file in Downloads: co3ACtasks_1-5.docx
+[2026-10-09 13:15:10] File found: C:\Users\Charan\Downloads\co3ACtasks_1-5.docx
+[2026-10-09 13:15:10] Checking download completion: C:\Users\Charan\Downloads\co3ACtasks_1-5.docx
+[2026-10-09 13:15:12] Download complete: C:\Users\Charan\Downloads\co3ACtasks_1-5.docx
+[2026-10-09 13:15:12] COPIED: C:\Users\Charan\Downloads\co3ACtasks_1-5.docx -> E:\College Files\Java\co3ACtasks_1-5.docx
+[2026-10-09 13:15:12] SUCCESS: E:\College Files\Java\co3ACtasks_1-5.docx
+[2026-10-09 13:15:36] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=Interfaces_complete_code.docx
+[2026-10-09 13:15:36] Waiting for file in Downloads: Interfaces_complete_code.docx
+[2026-10-09 13:15:36] File found: C:\Users\Charan\Downloads\Interfaces_complete_code.docx
+[2026-10-09 13:15:36] Checking download completion: C:\Users\Charan\Downloads\Interfaces_complete_code.docx
+[2026-10-09 13:15:38] Download complete: C:\Users\Charan\Downloads\Interfaces_complete_code.docx
+[2026-10-09 13:15:38] COPIED: C:\Users\Charan\Downloads\Interfaces_complete_code.docx -> E:\College Files\Java\Interfaces_complete_code.docx
+[2026-10-09 13:15:38] SUCCESS: E:\College Files\Java\Interfaces_complete_code.docx
+[2026-10-09 13:16:03] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=co3ACtasks_6-10 (1).docx
+[2026-10-09 13:16:03] Waiting for file in Downloads: co3ACtasks_6-10 (1).docx
+[2026-10-09 13:16:03] File found: C:\Users\Charan\Downloads\co3ACtasks_6-10 (1).docx
+[2026-10-09 13:16:03] Checking download completion: C:\Users\Charan\Downloads\co3ACtasks_6-10 (1).docx
+[2026-10-09 13:16:05] Download complete: C:\Users\Charan\Downloads\co3ACtasks_6-10 (1).docx
+[2026-10-09 13:16:05] COPIED: C:\Users\Charan\Downloads\co3ACtasks_6-10 (1).docx -> E:\College Files\Java\co3ACtasks_6-10 (1).docx
+[2026-10-09 13:16:05] SUCCESS: E:\College Files\Java\co3ACtasks_6-10 (1).docx
+[2026-10-09 13:16:31] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=Interfaces-default-static-FI_complete.docx
+[2026-10-09 13:16:31] Waiting for file in Downloads: Interfaces-default-static-FI_complete.docx
+[2026-10-09 13:16:31] File found: C:\Users\Charan\Downloads\Interfaces-default-static-FI_complete.docx
+[2026-10-09 13:16:31] Checking download completion: C:\Users\Charan\Downloads\Interfaces-default-static-FI_complete.docx
+[2026-10-09 13:16:33] Download complete: C:\Users\Charan\Downloads\Interfaces-default-static-FI_complete.docx
+[2026-10-09 13:16:33] COPIED: C:\Users\Charan\Downloads\Interfaces-default-static-FI_complete.docx -> E:\College Files\Java\Interfaces-default-static-FI_complete.docx
+[2026-10-09 13:16:33] SUCCESS: E:\College Files\Java\Interfaces-default-static-FI_complete.docx
+[2026-10-09 13:18:34] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=INT-principles.docx
+[2026-10-09 13:18:34] Waiting for file in Downloads: INT-principles.docx
+[2026-10-09 13:18:34] File found: C:\Users\Charan\Downloads\INT-principles.docx
+[2026-10-09 13:18:34] Checking download completion: C:\Users\Charan\Downloads\INT-principles.docx
+[2026-10-09 13:18:36] Download complete: C:\Users\Charan\Downloads\INT-principles.docx
+[2026-10-09 13:18:36] COPIED: C:\Users\Charan\Downloads\INT-principles.docx -> E:\College Files\Java\INT-principles.docx
+[2026-10-09 13:18:36] SUCCESS: E:\College Files\Java\INT-principles.docx
+[2026-10-09 13:18:45] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=Inheritance, agg-comp.docx
+[2026-10-09 13:18:45] Waiting for file in Downloads: Inheritance, agg-comp.docx
+[2026-10-09 13:18:45] File found: C:\Users\Charan\Downloads\Inheritance, agg-comp.docx
+[2026-10-09 13:18:45] Checking download completion: C:\Users\Charan\Downloads\Inheritance, agg-comp.docx
+[2026-10-09 13:18:47] Download complete: C:\Users\Charan\Downloads\Inheritance, agg-comp.docx
+[2026-10-09 13:18:47] Same filename exists: E:\College Files\Java\Inheritance, agg-comp.docx
+[2026-10-09 13:18:47] DUPLICATE CONTENT - already exists: E:\College Files\Java\Inheritance, agg-comp.docx
+[2026-10-09 13:18:47] SUCCESS: E:\College Files\Java\Inheritance, agg-comp.docx
+[2026-10-09 13:22:17] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=CO3-3.1-STM32F446RE_Polling_Vs_Interrupts.docx
+[2026-10-09 13:22:17] Waiting for file in Downloads: CO3-3.1-STM32F446RE_Polling_Vs_Interrupts.docx
+[2026-10-09 13:22:17] File found: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts.docx
+[2026-10-09 13:22:17] Checking download completion: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts.docx
+[2026-10-09 13:22:19] REQUEST: group=ESD&IoT LE, file=CO3-3.1-STM32F446RE_NVIC_Priority and Preemption.docx
+[2026-10-09 13:22:19] Waiting for file in Downloads: CO3-3.1-STM32F446RE_NVIC_Priority and Preemption.docx
+[2026-10-09 13:22:19] File found: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_NVIC_Priority and Preemption.docx
+[2026-10-09 13:22:19] Checking download completion: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_NVIC_Priority and Preemption.docx
+[2026-10-09 13:22:19] Download complete: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts.docx
+[2026-10-09 13:22:19] COPIED: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts.docx -> E:\College Files\Java\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts.docx
+[2026-10-09 13:22:19] SUCCESS: E:\College Files\Java\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts.docx
+[2026-10-09 13:22:20] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=CO 3 - 3.4 QA.docx
+[2026-10-09 13:22:20] Waiting for file in Downloads: CO 3 - 3.4 QA.docx
+[2026-10-09 13:22:20] File found: C:\Users\Charan\Downloads\CO 3 - 3.4 QA.docx
+[2026-10-09 13:22:20] Checking download completion: C:\Users\Charan\Downloads\CO 3 - 3.4 QA.docx
+[2026-10-09 13:22:20] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=CO 3 3.4 1kHz_Timer_Tick.docx
+[2026-10-09 13:22:20] Waiting for file in Downloads: CO 3 3.4 1kHz_Timer_Tick.docx
+[2026-10-09 13:22:20] File found: C:\Users\Charan\Downloads\CO 3 3.4 1kHz_Timer_Tick.docx
+[2026-10-09 13:22:20] Checking download completion: C:\Users\Charan\Downloads\CO 3 3.4 1kHz_Timer_Tick.docx
+[2026-10-09 13:22:21] Download complete: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_NVIC_Priority and Preemption.docx
+[2026-10-09 13:22:21] COPIED: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_NVIC_Priority and Preemption.docx -> E:\College Files\IoT\CO3-3.1-STM32F446RE_NVIC_Priority and Preemption.docx
+[2026-10-09 13:22:21] SUCCESS: E:\College Files\IoT\CO3-3.1-STM32F446RE_NVIC_Priority and Preemption.docx
+[2026-10-09 13:22:21] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=CO 3-1 -Q & A.docx
+[2026-10-09 13:22:21] Waiting for file in Downloads: CO 3-1 -Q & A.docx
+[2026-10-09 13:22:21] File found: C:\Users\Charan\Downloads\CO 3-1 -Q & A.docx
+[2026-10-09 13:22:21] Checking download completion: C:\Users\Charan\Downloads\CO 3-1 -Q & A.docx
+[2026-10-09 13:22:21] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=CO 3 - 3.1 to 3.4 Slides.pptx
+[2026-10-09 13:22:21] Waiting for file in Downloads: CO 3 - 3.1 to 3.4 Slides.pptx
+[2026-10-09 13:22:21] File found: C:\Users\Charan\Downloads\CO 3 - 3.1 to 3.4 Slides.pptx
+[2026-10-09 13:22:21] Checking download completion: C:\Users\Charan\Downloads\CO 3 - 3.1 to 3.4 Slides.pptx
+[2026-10-09 13:22:22] Download complete: C:\Users\Charan\Downloads\CO 3 - 3.4 QA.docx
+[2026-10-09 13:22:22] COPIED: C:\Users\Charan\Downloads\CO 3 - 3.4 QA.docx -> E:\College Files\Java\CO 3 - 3.4 QA.docx
+[2026-10-09 13:22:22] SUCCESS: E:\College Files\Java\CO 3 - 3.4 QA.docx
+[2026-10-09 13:22:22] Download complete: C:\Users\Charan\Downloads\CO 3 3.4 1kHz_Timer_Tick.docx
+[2026-10-09 13:22:22] COPIED: C:\Users\Charan\Downloads\CO 3 3.4 1kHz_Timer_Tick.docx -> E:\College Files\Java\CO 3 3.4 1kHz_Timer_Tick.docx
+[2026-10-09 13:22:22] SUCCESS: E:\College Files\Java\CO 3 3.4 1kHz_Timer_Tick.docx
+[2026-10-09 13:22:22] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=CO 3 - 3.2 - Q & A.docx
+[2026-10-09 13:22:22] Waiting for file in Downloads: CO 3 - 3.2 - Q & A.docx
+[2026-10-09 13:22:22] File found: C:\Users\Charan\Downloads\CO 3 - 3.2 - Q & A.docx
+[2026-10-09 13:22:22] Checking download completion: C:\Users\Charan\Downloads\CO 3 - 3.2 - Q & A.docx
+[2026-10-09 13:22:23] Download complete: C:\Users\Charan\Downloads\CO 3-1 -Q & A.docx
+[2026-10-09 13:22:23] COPIED: C:\Users\Charan\Downloads\CO 3-1 -Q & A.docx -> E:\College Files\Java\CO 3-1 -Q & A.docx
+[2026-10-09 13:22:23] SUCCESS: E:\College Files\Java\CO 3-1 -Q & A.docx
+[2026-10-09 13:22:23] Download complete: C:\Users\Charan\Downloads\CO 3 - 3.1 to 3.4 Slides.pptx
+[2026-10-09 13:22:23] COPIED: C:\Users\Charan\Downloads\CO 3 - 3.1 to 3.4 Slides.pptx -> E:\College Files\Java\CO 3 - 3.1 to 3.4 Slides.pptx
+[2026-10-09 13:22:23] SUCCESS: E:\College Files\Java\CO 3 - 3.1 to 3.4 Slides.pptx
+[2026-10-09 13:22:24] Download complete: C:\Users\Charan\Downloads\CO 3 - 3.2 - Q & A.docx
+[2026-10-09 13:22:24] COPIED: C:\Users\Charan\Downloads\CO 3 - 3.2 - Q & A.docx -> E:\College Files\Java\CO 3 - 3.2 - Q & A.docx
+[2026-10-09 13:22:24] SUCCESS: E:\College Files\Java\CO 3 - 3.2 - Q & A.docx
+[2026-10-09 13:22:52] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=CO 3 - 3.3 QA.docx
+[2026-10-09 13:22:52] Waiting for file in Downloads: CO 3 - 3.3 QA.docx
+[2026-10-09 13:22:52] File found: C:\Users\Charan\Downloads\CO 3 - 3.3 QA.docx
+[2026-10-09 13:22:52] Checking download completion: C:\Users\Charan\Downloads\CO 3 - 3.3 QA.docx
+[2026-10-09 13:22:52] REQUEST: group=ESD&IoT LE, file=CO 3 - 3.3 ISR_Design.docx
+[2026-10-09 13:22:52] Waiting for file in Downloads: CO 3 - 3.3 ISR_Design.docx
+[2026-10-09 13:22:52] File found: C:\Users\Charan\Downloads\CO 3 - 3.3 ISR_Design.docx
+[2026-10-09 13:22:52] Checking download completion: C:\Users\Charan\Downloads\CO 3 - 3.3 ISR_Design.docx
+[2026-10-09 13:22:54] Download complete: C:\Users\Charan\Downloads\CO 3 - 3.3 QA.docx
+[2026-10-09 13:22:54] COPIED: C:\Users\Charan\Downloads\CO 3 - 3.3 QA.docx -> E:\College Files\Java\CO 3 - 3.3 QA.docx
+[2026-10-09 13:22:54] SUCCESS: E:\College Files\Java\CO 3 - 3.3 QA.docx
+[2026-10-09 13:22:54] Download complete: C:\Users\Charan\Downloads\CO 3 - 3.3 ISR_Design.docx
+[2026-10-09 13:22:54] COPIED: C:\Users\Charan\Downloads\CO 3 - 3.3 ISR_Design.docx -> E:\College Files\IoT\CO 3 - 3.3 ISR_Design.docx
+[2026-10-09 13:22:54] SUCCESS: E:\College Files\IoT\CO 3 - 3.3 ISR_Design.docx
+[2026-10-09 13:22:55] REQUEST: group=ESD&IoT LE, file=CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (1).docx
+[2026-10-09 13:22:55] Waiting for file in Downloads: CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (1).docx
+[2026-10-09 13:22:55] File found: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (1).docx
+[2026-10-09 13:22:55] Checking download completion: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (1).docx
+[2026-10-09 13:22:57] Download complete: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (1).docx
+[2026-10-09 13:22:57] COPIED: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (1).docx -> E:\College Files\IoT\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (1).docx
+[2026-10-09 13:22:57] SUCCESS: E:\College Files\IoT\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (1).docx
+[2026-10-09 13:22:57] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=CO4.2- Discrete-time PID — the implementable form on a microcontroller..pptx
+[2026-10-09 13:22:57] Waiting for file in Downloads: CO4.2- Discrete-time PID — the implementable form on a microcontroller..pptx
+[2026-10-09 13:22:57] File found: C:\Users\Charan\Downloads\CO4.2- Discrete-time PID — the implementable form on a microcontroller..pptx
+[2026-10-09 13:22:57] Checking download completion: C:\Users\Charan\Downloads\CO4.2- Discrete-time PID — the implementable form on a microcontroller..pptx
+[2026-10-09 13:22:58] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=CO4.1- Continuous PID at intuition level- Q & A.docx
+[2026-10-09 13:22:58] Waiting for file in Downloads: CO4.1- Continuous PID at intuition level- Q & A.docx
+[2026-10-09 13:22:58] File found: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level- Q & A.docx
+[2026-10-09 13:22:58] Checking download completion: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level- Q & A.docx
+[2026-10-09 13:22:59] Download complete: C:\Users\Charan\Downloads\CO4.2- Discrete-time PID — the implementable form on a microcontroller..pptx
+[2026-10-09 13:22:59] COPIED: C:\Users\Charan\Downloads\CO4.2- Discrete-time PID — the implementable form on a microcontroller..pptx -> E:\College Files\Java\CO4.2- Discrete-time PID — the implementable form on a microcontroller..pptx
+[2026-10-09 13:22:59] SUCCESS: E:\College Files\Java\CO4.2- Discrete-time PID — the implementable form on a microcontroller..pptx
+[2026-10-09 13:22:59] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=CO4.1- Continuous PID at intuition level.pptx
+[2026-10-09 13:22:59] Waiting for file in Downloads: CO4.1- Continuous PID at intuition level.pptx
+[2026-10-09 13:22:59] File found: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level.pptx
+[2026-10-09 13:22:59] Checking download completion: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level.pptx
+[2026-10-09 13:23:00] Download complete: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level- Q & A.docx
+[2026-10-09 13:23:00] COPIED: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level- Q & A.docx -> E:\College Files\Java\CO4.1- Continuous PID at intuition level- Q & A.docx
+[2026-10-09 13:23:00] SUCCESS: E:\College Files\Java\CO4.1- Continuous PID at intuition level- Q & A.docx
+[2026-10-09 13:23:01] Download complete: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level.pptx
+[2026-10-09 13:23:01] COPIED: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level.pptx -> E:\College Files\Java\CO4.1- Continuous PID at intuition level.pptx
+[2026-10-09 13:23:01] SUCCESS: E:\College Files\Java\CO4.1- Continuous PID at intuition level.pptx
+[2026-10-09 13:23:07] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=CO 3 - 3.4 QA (1).docx
+[2026-10-09 13:23:07] Waiting for file in Downloads: CO 3 - 3.4 QA (1).docx
+[2026-10-09 13:23:07] File found: C:\Users\Charan\Downloads\CO 3 - 3.4 QA (1).docx
+[2026-10-09 13:23:07] Checking download completion: C:\Users\Charan\Downloads\CO 3 - 3.4 QA (1).docx
+[2026-10-09 13:23:08] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=CO 3 3.4 1kHz_Timer_Tick (1).docx
+[2026-10-09 13:23:08] Waiting for file in Downloads: CO 3 3.4 1kHz_Timer_Tick (1).docx
+[2026-10-09 13:23:08] File found: C:\Users\Charan\Downloads\CO 3 3.4 1kHz_Timer_Tick (1).docx
+[2026-10-09 13:23:08] Checking download completion: C:\Users\Charan\Downloads\CO 3 3.4 1kHz_Timer_Tick (1).docx
+[2026-10-09 13:23:09] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=CO 3 - 3.1 to 3.4 Slides (1).pptx
+[2026-10-09 13:23:09] Waiting for file in Downloads: CO 3 - 3.1 to 3.4 Slides (1).pptx
+[2026-10-09 13:23:09] File found: C:\Users\Charan\Downloads\CO 3 - 3.1 to 3.4 Slides (1).pptx
+[2026-10-09 13:23:09] Checking download completion: C:\Users\Charan\Downloads\CO 3 - 3.1 to 3.4 Slides (1).pptx
+[2026-10-09 13:23:09] Download complete: C:\Users\Charan\Downloads\CO 3 - 3.4 QA (1).docx
+[2026-10-09 13:23:09] COPIED: C:\Users\Charan\Downloads\CO 3 - 3.4 QA (1).docx -> E:\College Files\Java\CO 3 - 3.4 QA (1).docx
+[2026-10-09 13:23:09] SUCCESS: E:\College Files\Java\CO 3 - 3.4 QA (1).docx
+[2026-10-09 13:23:10] REQUEST: group=ESD&IoT LE, file=CO 3-1 -Q & A (1).docx
+[2026-10-09 13:23:10] Waiting for file in Downloads: CO 3-1 -Q & A (1).docx
+[2026-10-09 13:23:10] File found: C:\Users\Charan\Downloads\CO 3-1 -Q & A (1).docx
+[2026-10-09 13:23:10] Checking download completion: C:\Users\Charan\Downloads\CO 3-1 -Q & A (1).docx
+[2026-10-09 13:23:10] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=CO 3 - 3.2 - Q & A (1).docx
+[2026-10-09 13:23:10] Waiting for file in Downloads: CO 3 - 3.2 - Q & A (1).docx
+[2026-10-09 13:23:10] File found: C:\Users\Charan\Downloads\CO 3 - 3.2 - Q & A (1).docx
+[2026-10-09 13:23:10] Checking download completion: C:\Users\Charan\Downloads\CO 3 - 3.2 - Q & A (1).docx
+[2026-10-09 13:23:10] Download complete: C:\Users\Charan\Downloads\CO 3 3.4 1kHz_Timer_Tick (1).docx
+[2026-10-09 13:23:10] COPIED: C:\Users\Charan\Downloads\CO 3 3.4 1kHz_Timer_Tick (1).docx -> E:\College Files\Java\CO 3 3.4 1kHz_Timer_Tick (1).docx
+[2026-10-09 13:23:10] SUCCESS: E:\College Files\Java\CO 3 3.4 1kHz_Timer_Tick (1).docx
+[2026-10-09 13:23:11] Download complete: C:\Users\Charan\Downloads\CO 3 - 3.1 to 3.4 Slides (1).pptx
+[2026-10-09 13:23:11] COPIED: C:\Users\Charan\Downloads\CO 3 - 3.1 to 3.4 Slides (1).pptx -> E:\College Files\Java\CO 3 - 3.1 to 3.4 Slides (1).pptx
+[2026-10-09 13:23:11] SUCCESS: E:\College Files\Java\CO 3 - 3.1 to 3.4 Slides (1).pptx
+[2026-10-09 13:23:12] Download complete: C:\Users\Charan\Downloads\CO 3-1 -Q & A (1).docx
+[2026-10-09 13:23:12] COPIED: C:\Users\Charan\Downloads\CO 3-1 -Q & A (1).docx -> E:\College Files\IoT\CO 3-1 -Q & A (1).docx
+[2026-10-09 13:23:12] SUCCESS: E:\College Files\IoT\CO 3-1 -Q & A (1).docx
+[2026-10-09 13:23:12] Download complete: C:\Users\Charan\Downloads\CO 3 - 3.2 - Q & A (1).docx
+[2026-10-09 13:23:12] COPIED: C:\Users\Charan\Downloads\CO 3 - 3.2 - Q & A (1).docx -> E:\College Files\Java\CO 3 - 3.2 - Q & A (1).docx
+[2026-10-09 13:23:12] SUCCESS: E:\College Files\Java\CO 3 - 3.2 - Q & A (1).docx
+[2026-10-09 13:23:25] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=CO 3 - 3.3 QA (1).docx
+[2026-10-09 13:23:25] Waiting for file in Downloads: CO 3 - 3.3 QA (1).docx
+[2026-10-09 13:23:25] File found: C:\Users\Charan\Downloads\CO 3 - 3.3 QA (1).docx
+[2026-10-09 13:23:25] Checking download completion: C:\Users\Charan\Downloads\CO 3 - 3.3 QA (1).docx
+[2026-10-09 13:23:27] Download complete: C:\Users\Charan\Downloads\CO 3 - 3.3 QA (1).docx
+[2026-10-09 13:23:27] COPIED: C:\Users\Charan\Downloads\CO 3 - 3.3 QA (1).docx -> E:\College Files\Java\CO 3 - 3.3 QA (1).docx
+[2026-10-09 13:23:27] SUCCESS: E:\College Files\Java\CO 3 - 3.3 QA (1).docx
+[2026-10-09 13:23:28] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (2).docx
+[2026-10-09 13:23:28] Waiting for file in Downloads: CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (2).docx
+[2026-10-09 13:23:28] File found: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (2).docx
+[2026-10-09 13:23:28] Checking download completion: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (2).docx
+[2026-10-09 13:23:30] Download complete: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (2).docx
+[2026-10-09 13:23:30] COPIED: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (2).docx -> E:\College Files\Java\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (2).docx
+[2026-10-09 13:23:30] SUCCESS: E:\College Files\Java\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (2).docx
+[2026-10-09 13:23:30] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=CO4.1- Continuous PID at intuition level- Q & A (1).docx
+[2026-10-09 13:23:30] Waiting for file in Downloads: CO4.1- Continuous PID at intuition level- Q & A (1).docx
+[2026-10-09 13:23:30] File found: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level- Q & A (1).docx
+[2026-10-09 13:23:30] Checking download completion: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level- Q & A (1).docx
+[2026-10-09 13:23:31] REQUEST: group=25CS2102L, file=CO4.1- Continuous PID at intuition level (1).pptx
+[2026-10-09 13:23:31] Waiting for file in Downloads: CO4.1- Continuous PID at intuition level (1).pptx
+[2026-10-09 13:23:31] File found: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level (1).pptx
+[2026-10-09 13:23:31] Checking download completion: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level (1).pptx
+[2026-10-09 13:23:32] Download complete: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level- Q & A (1).docx
+[2026-10-09 13:23:32] COPIED: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level- Q & A (1).docx -> E:\College Files\Java\CO4.1- Continuous PID at intuition level- Q & A (1).docx
+[2026-10-09 13:23:32] SUCCESS: E:\College Files\Java\CO4.1- Continuous PID at intuition level- Q & A (1).docx
+[2026-10-09 13:23:33] REQUEST: group=9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM, file=CO4.2- Discrete-time PID — the implementable form on a microcontroller. (1).pptx
+[2026-10-09 13:23:33] Waiting for file in Downloads: CO4.2- Discrete-time PID — the implementable form on a microcontroller. (1).pptx
+[2026-10-09 13:23:33] File found: C:\Users\Charan\Downloads\CO4.2- Discrete-time PID — the implementable form on a microcontroller. (1).pptx
+[2026-10-09 13:23:33] Checking download completion: C:\Users\Charan\Downloads\CO4.2- Discrete-time PID — the implementable form on a microcontroller. (1).pptx
+[2026-10-09 13:23:33] Download complete: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level (1).pptx
+[2026-10-09 13:23:33] COPIED: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level (1).pptx -> E:\College Files\OS\CO4.1- Continuous PID at intuition level (1).pptx
+[2026-10-09 13:23:33] SUCCESS: E:\College Files\OS\CO4.1- Continuous PID at intuition level (1).pptx
+[2026-10-09 13:23:35] Download complete: C:\Users\Charan\Downloads\CO4.2- Discrete-time PID — the implementable form on a microcontroller. (1).pptx
+[2026-10-09 13:23:35] COPIED: C:\Users\Charan\Downloads\CO4.2- Discrete-time PID — the implementable form on a microcontroller. (1).pptx -> E:\College Files\Java\CO4.2- Discrete-time PID — the implementable form on a microcontroller. (1).pptx
+[2026-10-09 13:23:35] SUCCESS: E:\College Files\Java\CO4.2- Discrete-time PID — the implementable form on a microcontroller. (1).pptx
+[2026-10-09 13:23:48] REQUEST: group=ESD&IoT LE, file=CO 3 - 3.4 QA (2).docx
+[2026-10-09 13:23:48] Waiting for file in Downloads: CO 3 - 3.4 QA (2).docx
+[2026-10-09 13:23:48] File found: C:\Users\Charan\Downloads\CO 3 - 3.4 QA (2).docx
+[2026-10-09 13:23:48] Checking download completion: C:\Users\Charan\Downloads\CO 3 - 3.4 QA (2).docx
+[2026-10-09 13:23:49] REQUEST: group=25CS2102L, file=CO 3 3.4 1kHz_Timer_Tick (2).docx
+[2026-10-09 13:23:49] Waiting for file in Downloads: CO 3 3.4 1kHz_Timer_Tick (2).docx
+[2026-10-09 13:23:49] File found: C:\Users\Charan\Downloads\CO 3 3.4 1kHz_Timer_Tick (2).docx
+[2026-10-09 13:23:49] Checking download completion: C:\Users\Charan\Downloads\CO 3 3.4 1kHz_Timer_Tick (2).docx
+[2026-10-09 13:23:50] Download complete: C:\Users\Charan\Downloads\CO 3 - 3.4 QA (2).docx
+[2026-10-09 13:23:50] COPIED: C:\Users\Charan\Downloads\CO 3 - 3.4 QA (2).docx -> E:\College Files\IoT\CO 3 - 3.4 QA (2).docx
+[2026-10-09 13:23:50] SUCCESS: E:\College Files\IoT\CO 3 - 3.4 QA (2).docx
+[2026-10-09 13:23:50] REQUEST: group=25CS2102L, file=CO 3 - 3.1 to 3.4 Slides (2).pptx
+[2026-10-09 13:23:50] Waiting for file in Downloads: CO 3 - 3.1 to 3.4 Slides (2).pptx
+[2026-10-09 13:23:50] File found: C:\Users\Charan\Downloads\CO 3 - 3.1 to 3.4 Slides (2).pptx
+[2026-10-09 13:23:50] Checking download completion: C:\Users\Charan\Downloads\CO 3 - 3.1 to 3.4 Slides (2).pptx
+[2026-10-09 13:23:50] REQUEST: group=25CS2102L, file=CO 3 - 3.2 - Q & A (2).docx
+[2026-10-09 13:23:50] Waiting for file in Downloads: CO 3 - 3.2 - Q & A (2).docx
+[2026-10-09 13:23:50] File found: C:\Users\Charan\Downloads\CO 3 - 3.2 - Q & A (2).docx
+[2026-10-09 13:23:50] Checking download completion: C:\Users\Charan\Downloads\CO 3 - 3.2 - Q & A (2).docx
+[2026-10-09 13:23:51] Download complete: C:\Users\Charan\Downloads\CO 3 3.4 1kHz_Timer_Tick (2).docx
+[2026-10-09 13:23:51] COPIED: C:\Users\Charan\Downloads\CO 3 3.4 1kHz_Timer_Tick (2).docx -> E:\College Files\OS\CO 3 3.4 1kHz_Timer_Tick (2).docx
+[2026-10-09 13:23:51] SUCCESS: E:\College Files\OS\CO 3 3.4 1kHz_Timer_Tick (2).docx
+[2026-10-09 13:23:52] Download complete: C:\Users\Charan\Downloads\CO 3 - 3.1 to 3.4 Slides (2).pptx
+[2026-10-09 13:23:52] COPIED: C:\Users\Charan\Downloads\CO 3 - 3.1 to 3.4 Slides (2).pptx -> E:\College Files\OS\CO 3 - 3.1 to 3.4 Slides (2).pptx
+[2026-10-09 13:23:52] SUCCESS: E:\College Files\OS\CO 3 - 3.1 to 3.4 Slides (2).pptx
+[2026-10-09 13:23:52] Download complete: C:\Users\Charan\Downloads\CO 3 - 3.2 - Q & A (2).docx
+[2026-10-09 13:23:52] COPIED: C:\Users\Charan\Downloads\CO 3 - 3.2 - Q & A (2).docx -> E:\College Files\OS\CO 3 - 3.2 - Q & A (2).docx
+[2026-10-09 13:23:52] SUCCESS: E:\College Files\OS\CO 3 - 3.2 - Q & A (2).docx
+[2026-10-09 13:23:53] REQUEST: group=ESD&IoT LE, file=CO4.2- Discrete-time PID — the implementable form on a microcontroller. (2).pptx
+[2026-10-09 13:23:53] Waiting for file in Downloads: CO4.2- Discrete-time PID — the implementable form on a microcontroller. (2).pptx
+[2026-10-09 13:23:53] File found: C:\Users\Charan\Downloads\CO4.2- Discrete-time PID — the implementable form on a microcontroller. (2).pptx
+[2026-10-09 13:23:53] Checking download completion: C:\Users\Charan\Downloads\CO4.2- Discrete-time PID — the implementable form on a microcontroller. (2).pptx
+[2026-10-09 13:23:54] REQUEST: group=ESD&IoT LE, file=CO4.1- Continuous PID at intuition level- Q & A (2).docx
+[2026-10-09 13:23:54] Waiting for file in Downloads: CO4.1- Continuous PID at intuition level- Q & A (2).docx
+[2026-10-09 13:23:54] File found: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level- Q & A (2).docx
+[2026-10-09 13:23:54] Checking download completion: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level- Q & A (2).docx
+[2026-10-09 13:23:54] REQUEST: group=ESD&IoT LE, file=CO4.1- Continuous PID at intuition level (2).pptx
+[2026-10-09 13:23:54] Waiting for file in Downloads: CO4.1- Continuous PID at intuition level (2).pptx
+[2026-10-09 13:23:54] File found: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level (2).pptx
+[2026-10-09 13:23:54] Checking download completion: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level (2).pptx
+[2026-10-09 13:23:55] Download complete: C:\Users\Charan\Downloads\CO4.2- Discrete-time PID — the implementable form on a microcontroller. (2).pptx
+[2026-10-09 13:23:55] COPIED: C:\Users\Charan\Downloads\CO4.2- Discrete-time PID — the implementable form on a microcontroller. (2).pptx -> E:\College Files\IoT\CO4.2- Discrete-time PID — the implementable form on a microcontroller. (2).pptx
+[2026-10-09 13:23:55] SUCCESS: E:\College Files\IoT\CO4.2- Discrete-time PID — the implementable form on a microcontroller. (2).pptx
+[2026-10-09 13:23:56] Download complete: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level- Q & A (2).docx
+[2026-10-09 13:23:56] COPIED: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level- Q & A (2).docx -> E:\College Files\IoT\CO4.1- Continuous PID at intuition level- Q & A (2).docx
+[2026-10-09 13:23:56] SUCCESS: E:\College Files\IoT\CO4.1- Continuous PID at intuition level- Q & A (2).docx
+[2026-10-09 13:23:56] Download complete: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level (2).pptx
+[2026-10-09 13:23:56] COPIED: C:\Users\Charan\Downloads\CO4.1- Continuous PID at intuition level (2).pptx -> E:\College Files\IoT\CO4.1- Continuous PID at intuition level (2).pptx
+[2026-10-09 13:23:56] SUCCESS: E:\College Files\IoT\CO4.1- Continuous PID at intuition level (2).pptx
+[2026-10-09 13:24:44] REQUEST: group=ESD&IoT LE, file=CO 3 - 3.3 QA (2).docx
+[2026-10-09 13:24:44] Waiting for file in Downloads: CO 3 - 3.3 QA (2).docx
+[2026-10-09 13:24:44] File found: C:\Users\Charan\Downloads\CO 3 - 3.3 QA (2).docx
+[2026-10-09 13:24:44] Checking download completion: C:\Users\Charan\Downloads\CO 3 - 3.3 QA (2).docx
+[2026-10-09 13:24:45] REQUEST: group=ESD&IoT LE, file=CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (3).docx
+[2026-10-09 13:24:45] Waiting for file in Downloads: CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (3).docx
+[2026-10-09 13:24:45] File found: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (3).docx
+[2026-10-09 13:24:45] Checking download completion: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (3).docx
+[2026-10-09 13:24:46] Download complete: C:\Users\Charan\Downloads\CO 3 - 3.3 QA (2).docx
+[2026-10-09 13:24:46] COPIED: C:\Users\Charan\Downloads\CO 3 - 3.3 QA (2).docx -> E:\College Files\IoT\CO 3 - 3.3 QA (2).docx
+[2026-10-09 13:24:46] SUCCESS: E:\College Files\IoT\CO 3 - 3.3 QA (2).docx
+[2026-10-09 13:24:47] Download complete: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (3).docx
+[2026-10-09 13:24:47] COPIED: C:\Users\Charan\Downloads\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (3).docx -> E:\College Files\IoT\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (3).docx
+[2026-10-09 13:24:47] SUCCESS: E:\College Files\IoT\CO3-3.1-STM32F446RE_Polling_Vs_Interrupts (3).docx
+[2026-10-09 13:25:49] REQUEST: group=ESD&IoT LE, file=CO3  3.7 to 3.8 STM32_Bare-Metal_Task_Scheduling.pptx
+[2026-10-09 13:25:49] Waiting for file in Downloads: CO3  3.7 to 3.8 STM32_Bare-Metal_Task_Scheduling.pptx
+[2026-10-09 13:25:49] File found: C:\Users\Charan\Downloads\CO3  3.7 to 3.8 STM32_Bare-Metal_Task_Scheduling.pptx
+[2026-10-09 13:25:49] Checking download completion: C:\Users\Charan\Downloads\CO3  3.7 to 3.8 STM32_Bare-Metal_Task_Scheduling.pptx
+[2026-10-09 13:25:51] Download complete: C:\Users\Charan\Downloads\CO3  3.7 to 3.8 STM32_Bare-Metal_Task_Scheduling.pptx
+[2026-10-09 13:25:51] COPIED: C:\Users\Charan\Downloads\CO3  3.7 to 3.8 STM32_Bare-Metal_Task_Scheduling.pptx -> E:\College Files\IoT\CO3  3.7 to 3.8 STM32_Bare-Metal_Task_Scheduling.pptx
+[2026-10-09 13:25:51] SUCCESS: E:\College Files\IoT\CO3  3.7 to 3.8 STM32_Bare-Metal_Task_Scheduling.pptx
+[2026-10-09 13:25:52] REQUEST: group=ESD&IoT LE, file=FINAL STM32F401RE  -LCD INTERFACING.pdf
+[2026-10-09 13:25:52] Waiting for file in Downloads: FINAL STM32F401RE  -LCD INTERFACING.pdf
+[2026-10-09 13:25:52] File found: C:\Users\Charan\Downloads\FINAL STM32F401RE  -LCD INTERFACING.pdf
+[2026-10-09 13:25:52] Checking download completion: C:\Users\Charan\Downloads\FINAL STM32F401RE  -LCD INTERFACING.pdf
+[2026-10-09 13:25:54] Download complete: C:\Users\Charan\Downloads\FINAL STM32F401RE  -LCD INTERFACING.pdf
+[2026-10-09 13:25:54] COPIED: C:\Users\Charan\Downloads\FINAL STM32F401RE  -LCD INTERFACING.pdf -> E:\College Files\IoT\FINAL STM32F401RE  -LCD INTERFACING.pdf
+[2026-10-09 13:25:54] SUCCESS: E:\College Files\IoT\FINAL STM32F401RE  -LCD INTERFACING.pdf
+[2026-10-09 13:30:39] REQUEST: group=ESD&IoT LE, file=M- 3 Case Studies.docx
+[2026-10-09 13:30:39] Waiting for file in Downloads: M- 3 Case Studies.docx
+[2026-10-09 13:30:39] File found: C:\Users\Charan\Downloads\M- 3 Case Studies.docx
+[2026-10-09 13:30:39] Checking download completion: C:\Users\Charan\Downloads\M- 3 Case Studies.docx
+[2026-10-09 13:30:41] Download complete: C:\Users\Charan\Downloads\M- 3 Case Studies.docx
+[2026-10-09 13:30:41] COPIED: C:\Users\Charan\Downloads\M- 3 Case Studies.docx -> E:\College Files\IoT\M- 3 Case Studies.docx
+[2026-10-09 13:30:41] SUCCESS: E:\College Files\IoT\M- 3 Case Studies.docx
+[2026-10-09 13:31:14] WhatsApp Organizer Bridge starting...
+[2026-10-09 13:31:14] Listening on http://127.0.0.1:8765
+[2026-10-09 13:33:11] REQUEST: group=25CS2102L, file=benchmark_test.docx
+[2026-10-09 13:33:11] Waiting for file in Downloads: benchmark_test.docx
+[2026-10-09 13:33:11] File found: C:\Users\Charan\Downloads\benchmark_test.docx
+[2026-10-09 13:33:11] Checking download completion: C:\Users\Charan\Downloads\benchmark_test.docx
+[2026-10-09 13:33:13] Download complete: C:\Users\Charan\Downloads\benchmark_test.docx
+[2026-10-09 13:33:13] COPIED: C:\Users\Charan\Downloads\benchmark_test.docx -> E:\College Files\OS\benchmark_test.docx
+[2026-10-09 13:33:13] SUCCESS: E:\College Files\OS\benchmark_test.docx
+[2026-10-09 13:34:11] REQUEST: group=ESD&IoT LE, file=co3ACtasks_6-10.docx
+[2026-10-09 13:34:11] Waiting for file in Downloads: co3ACtasks_6-10.docx
+[2026-10-09 13:34:11] File found: C:\Users\Charan\Downloads\co3ACtasks_6-10.docx
+[2026-10-09 13:34:11] Checking download completion: C:\Users\Charan\Downloads\co3ACtasks_6-10.docx
+[2026-10-09 13:34:13] Download complete: C:\Users\Charan\Downloads\co3ACtasks_6-10.docx
+[2026-10-09 13:34:13] COPIED: C:\Users\Charan\Downloads\co3ACtasks_6-10.docx -> E:\College Files\IoT\co3ACtasks_6-10.docx
+[2026-10-09 13:34:13] SUCCESS: E:\College Files\IoT\co3ACtasks_6-10.docx
+[2026-10-09 13:34:54] WhatsApp Organizer Bridge starting...
+[2026-10-09 13:34:54] Listening on http://127.0.0.1:8765
+[2026-10-09 13:35:16] REQUEST: group='25CS2102L', file='C:\Users\Charan\Downloads\speed_test.docx', original='speed_test.docx'
+[2026-10-09 13:35:16] COPIED: C:\Users\Charan\Downloads\speed_test.docx -> E:\College Files\OS\speed_test.docx
+[2026-10-09 13:35:16] SUCCESS: E:\College Files\OS\speed_test.docx
+[2026-10-09 13:36:18] WhatsApp Organizer Bridge starting...
+[2026-10-09 13:36:18] Listening on http://127.0.0.1:8765
