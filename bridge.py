@@ -8,11 +8,78 @@ import time
 from datetime import datetime
 
 # ============================================================
-# MAIN FOLDER & DOWNLOADS
+# MAIN FOLDER & DOWNLOADS (DYNAMIC CONFIG SUPPORT)
 # ============================================================
 
-BASE_FOLDER = r"E:\College Files"
+DEFAULT_BASE_FOLDER = r"E:\College Files"
 DOWNLOADS_FOLDER = os.path.expanduser(r"~\Downloads")
+
+DEFAULT_SUBJECT_MAPPINGS = {
+    "9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM": "Java",
+    "ESD&IoT LE": "IoT",
+    "Y25-Mathematics for Data Science": "Maths DS",
+    "25CS2102L": "OS",
+    "AIML le 2k26": "AIML",
+    "S-3 MFE Lateral": "MATHS FOR ENGINER"
+}
+
+CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sortly_config.json")
+
+BASE_FOLDER = DEFAULT_BASE_FOLDER
+SUBJECT_MAPPINGS = dict(DEFAULT_SUBJECT_MAPPINGS)
+SUBJECT_FOLDERS = {}
+
+def load_config():
+    global BASE_FOLDER, SUBJECT_MAPPINGS, SUBJECT_FOLDERS
+    base = DEFAULT_BASE_FOLDER
+    mappings = dict(DEFAULT_SUBJECT_MAPPINGS)
+    if os.path.isfile(CONFIG_FILE):
+        try:
+            with open(CONFIG_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                if data.get("base_folder"):
+                    base = data["base_folder"].strip()
+                if isinstance(data.get("subject_folders"), dict):
+                    mappings.update(data["subject_folders"])
+        except Exception as e:
+            print(f"Warning: could not load {CONFIG_FILE}: {e}")
+    BASE_FOLDER = base
+    SUBJECT_MAPPINGS = mappings
+    SUBJECT_FOLDERS = {}
+    for group, folder in mappings.items():
+        dest = os.path.join(BASE_FOLDER, folder)
+        SUBJECT_FOLDERS[group] = dest
+        try:
+            os.makedirs(dest, exist_ok=True)
+        except Exception:
+            pass
+    return base, mappings
+
+def save_config(new_base=None, new_mappings=None):
+    global BASE_FOLDER, SUBJECT_MAPPINGS, SUBJECT_FOLDERS
+    if new_base:
+        BASE_FOLDER = new_base.strip()
+    if isinstance(new_mappings, dict):
+        SUBJECT_MAPPINGS = new_mappings
+    SUBJECT_FOLDERS = {}
+    for group, folder in SUBJECT_MAPPINGS.items():
+        dest = os.path.join(BASE_FOLDER, folder)
+        SUBJECT_FOLDERS[group] = dest
+        try:
+            os.makedirs(dest, exist_ok=True)
+        except Exception:
+            pass
+    try:
+        with open(CONFIG_FILE, "w", encoding="utf-8") as f:
+            json.dump({
+                "base_folder": BASE_FOLDER,
+                "subject_folders": SUBJECT_MAPPINGS
+            }, f, indent=4, ensure_ascii=False)
+    except Exception as e:
+        print(f"Warning: could not save {CONFIG_FILE}: {e}")
+
+# Initialize config
+load_config()
 
 # ============================================================
 # SUPPORTED FILE TYPES
@@ -28,30 +95,6 @@ SUPPORTED_EXTENSIONS = {
     ".xlsx",
     ".txt",
     ".zip"
-}
-
-# ============================================================
-# WHATSAPP GROUP -> SUBJECT FOLDER
-# ============================================================
-
-SUBJECT_FOLDERS = {
-    "9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM":
-        os.path.join(BASE_FOLDER, "Java"),
-
-    "ESD&IoT LE":
-        os.path.join(BASE_FOLDER, "IoT"),
-
-    "Y25-Mathematics for Data Science":
-        os.path.join(BASE_FOLDER, "Maths DS"),
-
-    "25CS2102L":
-        os.path.join(BASE_FOLDER, "OS"),
-
-    "AIML le 2k26":
-        os.path.join(BASE_FOLDER, "AIML"),
-
-    "S-3 MFE Lateral":
-        os.path.join(BASE_FOLDER, "MATHS FOR ENGINER")
 }
 
 # ============================================================
@@ -279,22 +322,55 @@ class BridgeHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     # --------------------------------------------------------
-    # GET (Health Check)
+    # GET (Health Check & Config)
     # --------------------------------------------------------
 
     def do_GET(self):
+        if self.path == "/config":
+            self.send_json({
+                "ok": True,
+                "base_folder": BASE_FOLDER,
+                "subject_folders": SUBJECT_MAPPINGS,
+                "supported_extensions": sorted(list(SUPPORTED_EXTENSIONS))
+            }, 200)
+            return
+
         self.send_json({
             "ok": True,
             "status": "online",
             "message": "Sortly bridge is running",
+            "base_folder": BASE_FOLDER,
+            "configured_groups_count": len(SUBJECT_FOLDERS),
             "timestamp": int(time.time() * 1000)
         }, 200)
 
     # --------------------------------------------------------
-    # POST (/check and /organize)
+    # POST (/check, /organize, /config)
     # --------------------------------------------------------
 
     def do_POST(self):
+        # 0. /config endpoint: update base folder and subject mappings dynamically
+        if self.path == "/config":
+            try:
+                content_length = int(self.headers.get("Content-Length", 0))
+                body = self.rfile.read(content_length)
+                data = json.loads(body.decode("utf-8"))
+                new_base = data.get("base_folder") or data.get("baseFolder")
+                new_mappings = data.get("subject_folders") or data.get("mappings")
+                save_config(new_base, new_mappings)
+                log(f"CONFIG UPDATED: Base='{BASE_FOLDER}', {len(SUBJECT_MAPPINGS)} mappings saved.")
+                self.send_json({
+                    "ok": True,
+                    "message": "Configuration updated successfully",
+                    "base_folder": BASE_FOLDER,
+                    "subject_folders": SUBJECT_MAPPINGS
+                }, 200)
+                return
+            except Exception as e:
+                log(f"CONFIG ERROR: {e}")
+                self.send_json({"ok": False, "error": str(e)}, 500)
+                return
+
         # 1. /check endpoint: check if file is already organized
         if self.path == "/check":
             try:
@@ -303,10 +379,16 @@ class BridgeHandler(BaseHTTPRequestHandler):
                 data = json.loads(body.decode("utf-8"))
                 group_name = data.get("groupName", "")
                 raw_file_name = data.get("fileName", "")
+                target_folder = data.get("targetFolder") or data.get("folderName")
                 file_name = strip_chrome_duplicate_suffix(raw_file_name)
 
-                if group_name in SUBJECT_FOLDERS and file_name:
+                dest_folder = None
+                if group_name in SUBJECT_FOLDERS:
                     dest_folder = SUBJECT_FOLDERS[group_name]
+                elif target_folder:
+                    dest_folder = os.path.join(BASE_FOLDER, target_folder)
+
+                if dest_folder and file_name:
                     target_path = os.path.join(dest_folder, file_name)
                     exists = os.path.isfile(target_path)
 
@@ -358,17 +440,25 @@ class BridgeHandler(BaseHTTPRequestHandler):
             group_name = data.get("groupName", "")
             incoming_file_name = data.get("fileName", "")
             original_name = data.get("originalName", "") or get_clean_file_name(incoming_file_name)
+            target_folder = data.get("targetFolder") or data.get("folderName")
 
-            log(f"REQUEST: group='{group_name}', file='{incoming_file_name}', original='{original_name}'")
+            log(f"REQUEST: group='{group_name}', file='{incoming_file_name}', original='{original_name}', targetFolder='{target_folder}'")
 
-            # Check Group
+            # Check / Register Group Dynamically
             if group_name not in SUBJECT_FOLDERS:
-                log(f"UNKNOWN GROUP: {group_name}")
-                self.send_json({
-                    "ok": False,
-                    "message": f"Unknown WhatsApp group: '{group_name}'"
-                }, 400)
-                return
+                if target_folder:
+                    dest = os.path.join(BASE_FOLDER, target_folder)
+                    SUBJECT_FOLDERS[group_name] = dest
+                    SUBJECT_MAPPINGS[group_name] = target_folder
+                    save_config()
+                    log(f"DYNAMIC GROUP REGISTERED: '{group_name}' -> '{dest}'")
+                else:
+                    log(f"UNKNOWN GROUP: {group_name}")
+                    self.send_json({
+                        "ok": False,
+                        "message": f"Unknown WhatsApp group: '{group_name}'"
+                    }, 400)
+                    return
 
             # Check Filename
             if not incoming_file_name:

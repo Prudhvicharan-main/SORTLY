@@ -11,14 +11,17 @@ const HEALTH_URL = "http://127.0.0.1:8765/";
 
 const STORAGE_KEY = "sortly_state_v2";
 
-const configuredGroups = [
-    "9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM",
-    "ESD&IoT LE",
-    "Y25-Mathematics for Data Science",
-    "25CS2102L",
-    "AIML le 2k26",
-    "S-3 MFE Lateral"
-];
+const DEFAULT_MAPPINGS = {
+    "9968_OOPJ_25SC2006L_S:2-L-2026-2027-ODDSEM": "Java",
+    "ESD&IoT LE": "IoT",
+    "Y25-Mathematics for Data Science": "Maths DS",
+    "25CS2102L": "OS",
+    "AIML le 2k26": "AIML",
+    "S-3 MFE Lateral": "MATHS FOR ENGINER"
+};
+const DEFAULT_BASE_FOLDER = "E:\\College Files";
+
+const configuredGroups = Object.keys(DEFAULT_MAPPINGS);
 
 const supportedExtensions = [
     ".pdf",
@@ -71,7 +74,7 @@ function matchesExpectedFileName(expectedName, actualDownloadedName) {
 
 function createDefaultState() {
     const groups = {};
-    for (const g of configuredGroups) {
+    for (const g of Object.keys(DEFAULT_MAPPINGS)) {
         groups[g] = {
             importCompleted: false,
             baselineInitialized: false,
@@ -84,6 +87,8 @@ function createDefaultState() {
     return {
         version: 2,
         runState: "STOPPED", // Starts STOPPED on first use; once started, user preference persists
+        baseFolder: DEFAULT_BASE_FOLDER,
+        mappings: { ...DEFAULT_MAPPINGS },
         groups: groups,
         activeJobs: {}
     };
@@ -97,13 +102,22 @@ async function getStore() {
             store = createDefaultState();
             await chrome.storage.local.set({ [STORAGE_KEY]: store });
         }
-        // Ensure all configured groups are present
         let modified = false;
+        if (!store.mappings) {
+            store.mappings = { ...DEFAULT_MAPPINGS };
+            modified = true;
+        }
+        if (!store.baseFolder) {
+            store.baseFolder = DEFAULT_BASE_FOLDER;
+            modified = true;
+        }
         if (!store.groups) {
             store.groups = {};
             modified = true;
         }
-        for (const g of configuredGroups) {
+        // Ensure all mapped groups exist in store.groups
+        const allGroups = Object.keys(store.mappings);
+        for (const g of allGroups) {
             if (!store.groups[g]) {
                 store.groups[g] = {
                     importCompleted: false,
@@ -158,14 +172,15 @@ function notifyJobWaiters(job) {
 }
 
 async function registerPipelineJob(groupName, fileName, elementKey) {
-    if (!configuredGroups.includes(groupName)) {
+    const store = await getStore();
+    const isMapped = (store.mappings && store.mappings[groupName]) || configuredGroups.includes(groupName);
+    if (!isMapped) {
         throw new Error(`Unconfigured group: ${groupName}`);
     }
     if (!isSupportedFile(fileName)) {
         throw new Error(`Unsupported file: ${fileName}`);
     }
 
-    const store = await getStore();
     const cleanName = stripDuplicateSuffix(fileName);
     const jobId = `job_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
@@ -308,6 +323,8 @@ async function processJobOrganization(jobId, actualFilePath) {
     await updateJobState(jobId, "ORGANIZING");
     console.log(`📦 Dispatching to Python bridge: group="${job.groupName}", file="${actualFilePath}"`);
 
+    const targetFolder = (store.mappings && store.mappings[job.groupName]) || "";
+
     try {
         const response = await fetch(BRIDGE_URL, {
             method: "POST",
@@ -315,7 +332,8 @@ async function processJobOrganization(jobId, actualFilePath) {
             body: JSON.stringify({
                 groupName: job.groupName,
                 fileName: actualFilePath,
-                originalName: job.cleanFileName
+                originalName: job.cleanFileName,
+                targetFolder: targetFolder
             })
         });
 
@@ -462,7 +480,32 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     sendResponse({ ok: false, error: `Sortly is ${store.runState}` });
                     return;
                 }
-                const job = await registerPipelineJob(message.groupName, message.fileName, message.elementKey);
+
+                const cleanName = stripDuplicateSuffix(message.fileName);
+                const elementKey = message.elementKey || message.fileName;
+                const groupState = store.groups[message.groupName];
+
+                // Check if already organized or completed in this group
+                if (groupState) {
+                    if (groupState.organizedFiles.includes(cleanName) || groupState.processedFileKeys.includes(elementKey)) {
+                        sendResponse({ ok: false, error: "ALREADY_COMPLETED", alreadyCompleted: true });
+                        return;
+                    }
+                }
+
+                // Check if already active in pipeline
+                const activeJob = Object.values(store.activeJobs).find(j =>
+                    j.groupName === message.groupName &&
+                    (j.cleanFileName === cleanName || j.elementKey === elementKey) &&
+                    (j.state === "QUEUED" || j.state === "DOWNLOADING" || j.state === "DOWNLOADED" || j.state === "ORGANIZING")
+                );
+
+                if (activeJob) {
+                    sendResponse({ ok: false, error: "ALREADY_ACTIVE", job: activeJob });
+                    return;
+                }
+
+                const job = await registerPipelineJob(message.groupName, message.fileName, elementKey);
                 await updateJobState(job.id, "QUEUED");
                 sendResponse({ ok: true, job });
             } catch (err) {
@@ -509,6 +552,78 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     job: currentJob
                 });
             }, timeout);
+        })();
+        return true;
+    }
+
+    // 9. Get current configuration (mappings & baseFolder)
+    if (message.type === "GET_CONFIG") {
+        (async () => {
+            const store = await getStore();
+            sendResponse({
+                ok: true,
+                baseFolder: store.baseFolder || DEFAULT_BASE_FOLDER,
+                mappings: store.mappings || DEFAULT_MAPPINGS
+            });
+        })();
+        return true;
+    }
+
+    // 10. Update configuration (mappings & baseFolder) and sync with bridge
+    if (message.type === "UPDATE_CONFIG") {
+        (async () => {
+            try {
+                const store = await getStore();
+                const { baseFolder, mappings } = message;
+                if (baseFolder && typeof baseFolder === "string") {
+                    store.baseFolder = baseFolder.trim();
+                }
+                if (mappings && typeof mappings === "object") {
+                    store.mappings = mappings;
+                    // Ensure each group exists in store.groups
+                    for (const g of Object.keys(mappings)) {
+                        if (!store.groups[g]) {
+                            store.groups[g] = {
+                                importCompleted: false,
+                                baselineInitialized: false,
+                                baselineFileKeys: [],
+                                processedFileKeys: [],
+                                organizedFiles: [],
+                                failedJobs: {}
+                            };
+                        }
+                    }
+                }
+                await saveStore(store);
+
+                // Push new config to Python bridge
+                let bridgeSynced = false;
+                try {
+                    const res = await fetch("http://127.0.0.1:8765/config", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            base_folder: store.baseFolder,
+                            subject_folders: store.mappings
+                        })
+                    });
+                    const resData = await res.json();
+                    if (resData && resData.ok) {
+                        bridgeSynced = true;
+                    }
+                } catch (bridgeErr) {
+                    console.warn("Bridge config sync skipped/failed:", bridgeErr);
+                }
+
+                sendResponse({
+                    ok: true,
+                    baseFolder: store.baseFolder,
+                    mappings: store.mappings,
+                    bridgeSynced: bridgeSynced
+                });
+            } catch (err) {
+                sendResponse({ ok: false, error: err.message });
+            }
         })();
         return true;
     }

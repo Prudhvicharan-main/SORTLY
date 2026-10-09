@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.log
+
+# PyInstaller temporary build artifacts
+build/
+release/
+*.spec
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
